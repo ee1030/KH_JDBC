@@ -18,7 +18,24 @@ public class EmpService {
 		// --> 바로 EmpDAO.selectAll을 호출하여 결과를 반환 받기.
 		List<Emp> empList = empDAO.selectAll();
 		
-		return null;
+		// 1_10. DAO 반환 데이터의 가공처리가 필요 없으므로
+		// 그대로 다시 반환
+		return empList;
+	}
+
+	public Emp selectByEmpNo(int empNo) {
+		
+		Emp emp = empDAO.selectByEmpNo(empNo);
+		
+		return emp;
+	}
+
+	public int insertEmp(Emp emp) {
+		int result = 0;
+		
+		result = empDAO.insertEmp(emp);
+		
+		return result;
 	}
 
 }

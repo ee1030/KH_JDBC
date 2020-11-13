@@ -103,7 +103,7 @@ public class Emp {
 
 	@Override
 	public String toString() {
-		return "Emp [empNo=" + empNo + ", eName=" + eName + ", job=" + job + ", mgr=" + mgr + ", hireDate=" + hireDate
+		return " [empNo=" + empNo + ", eName=" + eName + ", job=" + job + ", mgr=" + mgr + ", hireDate=" + hireDate
 				+ ", sal=" + sal + ", comm=" + comm + ", deptNo=" + deptNo + "]";
 	}
 	
