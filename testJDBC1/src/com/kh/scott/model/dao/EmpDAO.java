@@ -210,4 +210,80 @@ public class EmpDAO {
 		return result;
 	}
 
+	public int updateEmp(int currEmpNo, Emp emp) {
+		int result = 0;
+		
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+			
+			int empNo = emp.getEmpNo();
+			String eName = emp.geteName();
+			String job = emp.getJob();
+			int mgr = emp.getMgr();
+			Date hireDate = emp.getHireDate();
+			int sal = emp.getSal();
+			int comm = emp.getComm();
+			int deptNo = emp.getDeptNo();
+			
+			String query = "UPDATE EMP SET EMPNO = " + empNo + ", ENAME = '" + eName + "', JOB = '" + job + "', MGR = " 
+						+ mgr + ", HIREDATE = '" + hireDate + "', SAL = " + sal + ", COMM = " + comm + ", DEPTNO = " + deptNo
+						+ "WHERE EMPNO = " + currEmpNo;
+			
+			stmt = conn.createStatement();
+			stmt.executeQuery(query);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			result = 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			result = 1;
+		} finally {
+			try {
+				if(stmt != null) stmt.close();
+				if(conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+
+	public int deleteEmpByEmpNo(int empNo) {
+		int result = 0;
+		
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+			String query = "DELETE FROM EMP WHERE EMPNO = " + empNo;
+			
+			stmt = conn.createStatement();
+			stmt.executeQuery(query);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			result = 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			result = 1;
+		} finally {
+			try {
+				if(stmt != null) stmt.close();
+				if(conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
 }

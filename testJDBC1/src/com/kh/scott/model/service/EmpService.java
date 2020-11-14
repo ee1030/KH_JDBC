@@ -38,4 +38,20 @@ public class EmpService {
 		return result;
 	}
 
+	public int updateEmp(int currEmpNo, Emp emp) {
+		int result = 0;
+		
+		result = empDAO.updateEmp(currEmpNo, emp);
+		
+		return result;
+	}
+
+	public int deleteEmpByEmpNo(int empNo) {
+		int result = 0;
+		
+		result = empDAO.deleteEmpByEmpNo(empNo);
+		
+		return result;
+	}
+
 }

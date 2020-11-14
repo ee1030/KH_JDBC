@@ -42,8 +42,8 @@ public class EmpView {
 				case 1 : selectAll(); break; // 1-1번 같은 클래스에 있는 selectAll() 호출
 				case 2 : selectByEmpNo(); break;
 				case 3 : insertEmp(); break;
-				case 4 : break;
-				case 5 : break;
+				case 4 : updateEmp(); break;
+				case 5 : deleteEmpByEmpNo(); break;
 				case 0 : System.out.println("종료한다 애송이."); break;
 				default : System.out.println("잘못 입력했데수.");
 				}
@@ -141,4 +141,63 @@ public class EmpView {
 		
 	}
 
+	private void updateEmp() {
+		System.out.println("[기존 사원 정보 수정]");
+		
+		System.out.print("수정할 사원의 사번을 입력하세요 : ");
+		int CurrEmpNo = sc.nextInt();
+		sc.nextLine();
+		
+		System.out.print("사원의 수정할 사번 : ");
+		int empNo = sc.nextInt();
+		sc.nextLine();
+		
+		System.out.print("사원의 수정할 이름 : ");
+		String eName = sc.nextLine();
+		
+		System.out.print("사원의 수정할 직책 : ");
+		String job = sc.nextLine();
+		
+		System.out.print("사원의 수정할 직속상사 사번 : ");
+		int mgr = sc.nextInt();
+		sc.nextLine();
+		
+		System.out.print("사원의 수정할 입사일(yyyy-mm-dd) : ");
+		Date hireDate = Date.valueOf(sc.nextLine());
+		
+		System.out.print("사원의 수정할 급여 : ");
+		int sal = sc.nextInt();
+		sc.nextLine();
+		
+		System.out.print("사원의 수정할 성과급 : ");
+		int comm = sc.nextInt();
+		sc.nextLine();
+		
+		System.out.print("사원의 수정할 부서번호 : ");
+		int deptNo = sc.nextInt();
+		sc.nextLine();
+		
+		int result = empService.updateEmp(CurrEmpNo, new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo));
+		
+		if(result == 0) {
+			System.out.println("사원 정보 수정을 성공했습니다.");
+		} else {
+			System.out.println("사원 정보 수정에 실패했습니다.");
+		}
+	}
+	
+	private void deleteEmpByEmpNo() {
+		System.out.println("[사번으로 사원 정보 삭제]");
+		System.out.print("삭제할 사원의 사번을 입력하세요 : ");
+		int empNo = sc.nextInt();
+		sc.nextLine();
+		
+		int result = empService.deleteEmpByEmpNo(empNo);
+		
+		if(result == 0) {
+			System.out.println(empNo + "번 사원 정보 삭제에 성공했습니다.");
+		} else {
+			System.out.println(empNo + "번 사원 정보 삭제에 실패했습니다.");
+		}
+	}
 }
