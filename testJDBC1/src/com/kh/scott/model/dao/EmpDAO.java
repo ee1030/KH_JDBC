@@ -3,6 +3,7 @@ package com.kh.scott.model.dao;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -234,47 +235,103 @@ public class EmpDAO {
 //		
 //		return tmpEmp;
 //	}
-
-	public int insertEmp(Emp emp) {
-		int result = 0;
+	
+	// 3. 새로운 사원 정보 삽입용 DAO
+	public void insertEmp(Emp emp) {
 		
+		// 3_4. JDBC 드라이버 등록 및 DB 연결 관련 변수 선언
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		/* PreparedStatement
+		 * 
+		 * - Statement의 자식으로 좀 더 향상된 기능을 제공함.
+		 * - ? (위치 홀더)를 이용하여 SQL에 작성되는
+		 * 	 리터럴 값을 동적으로 작성함.
+		 * 
+		 * - 코드 안정성과 가독성이 증가함.
+		 * - 코드 길이가 늘어나는 단점
+		 */
 		
 		try {
+			// 3_5. JDBC 드라이버 로드 및 커넥션 얻어오기
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
 			
-			int empNo = emp.getEmpNo();
-			String eName = emp.geteName();
-			String job = emp.getJob();
-			int mgr = emp.getMgr();
-			Date hireDate = emp.getHireDate();
-			int sal = emp.getSal();
-			int comm = emp.getComm();
-			int deptNo = emp.getDeptNo();
+			// 3_6. 자동 커밋 방지
+			// JDBC에서 DML 구문 수행 시 별도 조작이 없으면
+			// 한 행이 수행되자마자 COMMIT이 수행됨.
+			conn.setAutoCommit(false);
+			// -> 한 행 수행 시 자동 COMMIT이 되지 않게함.
+			// 단, 추후 COMMIT, ROLLBACK 없이
+			// conn.close()가 수행되면
+			// 모든 내용이 COMMIT 됨.
 			
-			String query = "INSERT INTO EMP VALUES(" + empNo + ", " + "'" + eName + "'" + ", " + "'" + job + "'" + ", " + mgr + ", " + "'" + hireDate + "'" + ", " + sal + ", " + comm + ", " + deptNo + ")";   
+			// 3_7. SQL 작성 후 PreparedStatement 객체 생성
+			String query = "INSERT INTO EMP VALUES(?, ?, ?, ?, SYSDATE, ?, ?, ?)";
 			
-			stmt = conn.createStatement();
-			stmt.executeQuery(query);
-		} catch (ClassNotFoundException e) {
+			pstmt = conn.prepareStatement(query);
+			
+			// 3_8. SQL 구문의 ?(위치 홀더)에 알맞은 값 대입
+			pstmt.setInt(1, emp.getEmpNo());
+			pstmt.setString(2, emp.geteName());
+			pstmt.setString(3, emp.getJob());
+			pstmt.setInt(4, emp.getMgr());
+			pstmt.setInt(5, emp.getSal());
+			pstmt.setInt(6, emp.getComm());
+			pstmt.setInt(7, emp.getDeptNo());
+			
+			// 3_9. SQL 구문 수행 후 결과를 전달받음.
+			// DML 구문 수행 시 excuteUpdate() 호출
+			// DB에서 DML구문 수행 시 DML 구문 수행이 성공한 행의 개수를 반환 
+			result = pstmt.executeUpdate();
+			
+		} catch(Exception e) {
 			e.printStackTrace();
-			result = 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			result = 1;
-		} finally {
-			try {
-				if(stmt != null) stmt.close();
-				if(conn != null) conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		
-		return result;
 	}
+
+//	public int insertEmp(Emp emp) {
+//		int result = 0;
+//		
+//		Connection conn = null;
+//		Statement stmt = null;
+//		
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+//			
+//			int empNo = emp.getEmpNo();
+//			String eName = emp.geteName();
+//			String job = emp.getJob();
+//			int mgr = emp.getMgr();
+//			Date hireDate = emp.getHireDate();
+//			int sal = emp.getSal();
+//			int comm = emp.getComm();
+//			int deptNo = emp.getDeptNo();
+//			
+//			String query = "INSERT INTO EMP VALUES(" + empNo + ", " + "'" + eName + "'" + ", " + "'" + job + "'" + ", " + mgr + ", " + "'" + hireDate + "'" + ", " + sal + ", " + comm + ", " + deptNo + ")";   
+//			
+//			stmt = conn.createStatement();
+//			stmt.executeQuery(query);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			result = 1;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			result = 1;
+//		} finally {
+//			try {
+//				if(stmt != null) stmt.close();
+//				if(conn != null) conn.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return result;
+//	}
 
 	public int updateEmp(int currEmpNo, Emp emp) {
 		int result = 0;
@@ -399,5 +456,6 @@ public class EmpDAO {
 
 		return emp;
 	}
+
 
 }

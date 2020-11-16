@@ -43,14 +43,22 @@ public class EmpService {
 //		// 조회된 사원 한 명의 정보를 반환받음.
 //		return empDAO.selectOne(empNo);
 //	}
-
-	public int insertEmp(Emp emp) {
-		int result = 0;
+	
+	// 3. 새로운 사원 정보 삽입용 Service
+	public void insertEmp(Emp emp) {
 		
-		result = empDAO.insertEmp(emp);
-		
-		return result;
+		// 3_3. 전달받은 emp를 EmpDAO객체의 insertEmp(emp)로 전달하여
+		// 결과를 반환 받음.
+		empDAO.insertEmp(emp);
 	}
+
+//	public int insertEmp(Emp emp) {
+//		int result = 0;
+//		
+//		result = empDAO.insertEmp(emp);
+//		
+//		return result;
+//	}
 
 	public int updateEmp(int currEmpNo, Emp emp) {
 		int result = 0;

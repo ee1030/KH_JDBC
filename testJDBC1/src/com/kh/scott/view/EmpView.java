@@ -130,46 +130,88 @@ public class EmpView {
 //		}
 //	}
 	
+	// 새로운 사원 정보 삽입용 View
 	private void insertEmp() {
-		System.out.println("[새로운 사원 정보 추가]");
-		System.out.print("새로운 사원의 사번 : ");
+		System.out.println("[사원 정보 추가]");
+		
+		System.out.print("사번 : ");
 		int empNo = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.print("새로운 사원의 이름 : ");
+		System.out.print("이름 : ");
 		String eName = sc.nextLine();
 		
-		System.out.print("새로운 사원의 직책 : ");
+		System.out.print("직책 : ");
 		String job = sc.nextLine();
 		
-		System.out.print("새로운 사원의 직속상사 사번 : ");
+		System.out.print("직속 상사 사번 : ");
 		int mgr = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.print("새로운 사원의 입사일(yyyy-mm-dd) : ");
-		Date hireDate = Date.valueOf(sc.nextLine());
+		// HIREDATE는 insert 구문에서 SYSDATE로 작성
 		
-		System.out.print("새로운 사원의 급여 : ");
+		System.out.println("급여 : ");
 		int sal = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.print("새로운 사원의 성과급 : ");
+		System.out.println("커미션 : ");
 		int comm = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.print("새로운 사원의 부서번호 : ");
+		System.out.println("부서 번호 : ");
 		int deptNo = sc.nextInt();
 		sc.nextLine();
 		
-		int result = empService.insertEmp(new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo));
+		// 3_1. 입력받은 사원 정보를 하나의 emp 객체에 저장할 수 있도록
+		// Emp 클래스에 생성자를 새로 생성한 후 객체 생성
+		Emp emp = new Emp(empNo, eName, job, mgr, sal, comm, deptNo);
 		
-		if(result == 0) {
-			System.out.println("사원 정보 입력을 성공했습니다.");
-		} else {
-			System.out.println("사원 정보 입력에 실패했습니다.");
-		}
+		// 3_2. EmpService 객체의 insertEmp(emp) 메소드를 호출하여
+		// 데이터를 DB 삽입한 후 결과를 반환 받음
+		empService.insertEmp(emp);
 		
 	}
+	
+//	private void insertEmp() {
+//		System.out.println("[새로운 사원 정보 추가]");
+//		System.out.print("새로운 사원의 사번 : ");
+//		int empNo = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("새로운 사원의 이름 : ");
+//		String eName = sc.nextLine();
+//		
+//		System.out.print("새로운 사원의 직책 : ");
+//		String job = sc.nextLine();
+//		
+//		System.out.print("새로운 사원의 직속상사 사번 : ");
+//		int mgr = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("새로운 사원의 입사일(yyyy-mm-dd) : ");
+//		Date hireDate = Date.valueOf(sc.nextLine());
+//		
+//		System.out.print("새로운 사원의 급여 : ");
+//		int sal = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("새로운 사원의 성과급 : ");
+//		int comm = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("새로운 사원의 부서번호 : ");
+//		int deptNo = sc.nextInt();
+//		sc.nextLine();
+//		
+//		int result = empService.insertEmp(new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo));
+//		
+//		if(result == 0) {
+//			System.out.println("사원 정보 입력을 성공했습니다.");
+//		} else {
+//			System.out.println("사원 정보 입력에 실패했습니다.");
+//		}
+//		
+//	}
 
 	private void updateEmp() {
 		System.out.println("[기존 사원 정보 수정]");
