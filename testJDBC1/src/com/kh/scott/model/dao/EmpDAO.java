@@ -566,7 +566,7 @@ public class EmpDAO {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, empNo);
 			
-			result = pstmt.executeUpdate(query);
+			result = pstmt.executeUpdate();
 			
 			if(result > 0) conn.commit();
 			else conn.rollback();
