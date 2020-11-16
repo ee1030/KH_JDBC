@@ -22,13 +22,27 @@ public class EmpService {
 		// 그대로 다시 반환
 		return empList;
 	}
-
-	public Emp selectByEmpNo(int empNo) {
+	// 2. 사번으로 사원 정보 조회 Service
+	public Emp selectOne(int empNo) { 
 		
-		Emp emp = empDAO.selectByEmpNo(empNo);
+		// 2_4. 전달받은 empNo의 별도 가공처리가 필요 없으므로
+		// EmpDAO.selectOne(empNo)를 호출하여
+		// 조회된 사원 한 명의 정보를 반환받음.
+		Emp emp = empDAO.selectOne(empNo); 
 		
+		// 2_10. 전달받은 emp를 반환
 		return emp;
 	}
+	
+
+//	// 2. 사번으로 사원 정보 조회 Service
+//	public Emp selectOne(int empNo) { 
+//		
+//		// 2_4. 전달받은 empNo의 별도 가공처리가 필요 없으므로
+//		// EmpDAO.selectOne(empNo)를 호출하여
+//		// 조회된 사원 한 명의 정보를 반환받음.
+//		return empDAO.selectOne(empNo);
+//	}
 
 	public int insertEmp(Emp emp) {
 		int result = 0;
@@ -52,6 +66,13 @@ public class EmpService {
 		result = empDAO.deleteEmpByEmpNo(empNo);
 		
 		return result;
+	}
+	
+	public Emp selectOne2(int empNo, String eName) {
+		// 대소문자 구분없이 모두 검색 가능하게 하는 방법
+		// -> 입력 받은 값, SQL에서 조회 조건을
+		//	  모두 대문자 또는 소문자로 통일
+		return empDAO.selectOne2(empNo, eName.toUpperCase());
 	}
 
 }

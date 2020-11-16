@@ -125,38 +125,59 @@ public class EmpDAO {
 		
 		return empList;
 	}
-
-	public Emp selectByEmpNo(int empNO) {
+	
+	// 2. 사번으로 사원 정보 조회 DAO
+	public Emp selectOne(int empNO) {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
-		Emp tmpEmp = null;
+		Emp emp = null;
+		// DB에서 조회한 결과를 저장할 Emp 참조변수
 		
 		try {
+			// 2_5. JDBC 드라이버 로드 및 커넥션 작업
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+			
+			// 2_6. 사원 한 명의 정보를 조회하기 위한 SQL 구문을 준비하고
+			// Statement 객체를 생성하여
+			// DB로 전달 및 수행 후 결과를 반환 받아 오기
 			String query = "SELECT * FROM EMP WHERE EMPNO = "+ empNO;
 			
 			stmt = conn.createStatement();
 			rset = stmt.executeQuery(query);
 			
-			rset.next();
-			int empNo = rset.getInt("EMPNO"); // 7369
-			String eName = rset.getString("ENAME"); // SMITH
-			String job = rset.getString("JOB");
-			int mgr = rset.getInt("MGR");
-			Date hireDate = rset.getDate("HIREDATE");
-			int sal = rset.getInt("SAL");
-			int comm = rset.getInt("COMM");
-			int deptNo = rset.getInt("DEPTNO");
+			// 2_7. 조회 결과가 있을 경우
+			// Emp 참조변수에 조회 결과를 저장
+			// 조회 결과가 0또는 1행이 반환 되므로 rset.next() 한 번 호출했을 때
+			// true가 나오면 조회 결과가 있는것,
+			// false가 나오면 조회 결과가 없는것
+			if(rset.next()) {
+				
+				// 조회 결과에서 각 컬럼의 값을 얻어와 변수에 저장
+				int empNo = rset.getInt("EMPNO");
+				String eName = rset.getString("ENAME");
+				String job = rset.getString("JOB");
+				int mgr = rset.getInt("MGR");
+				Date hireDate = rset.getDate("HIREDATE");
+				int sal = rset.getInt("SAL");
+				int comm = rset.getInt("COMM");
+				int deptNo = rset.getInt("DEPTNO");
+				
+				// 조회 결과를 이용하여 Emp 객체를 생성
+				emp = new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo);
+			}
 			
-			tmpEmp = new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo);
+			// 조회 성공시 emp는 참조하는 객체 있음
+			// 조회 실패시 emp는 참조하는 객체 없음(null)
+
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+			// 2_8. 사용한 JDBC 객체들을 반환
 			try {
 				if(rset != null) rset.close();
 				if(stmt != null) stmt.close();
@@ -166,8 +187,53 @@ public class EmpDAO {
 			}
 		}
 		
-		return tmpEmp;
+		// 2_9. 조회 결과가 저장된 emp 반환
+		return emp; // 메소드 반환형을 Emp로 수정
 	}
+	
+//	public Emp selectOne(int empNO) {
+//		Connection conn = null;
+//		Statement stmt = null;
+//		ResultSet rset = null;
+//		Emp tmpEmp = null;
+//		
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+//			
+//			String query = "SELECT * FROM EMP WHERE EMPNO = "+ empNO;
+//			
+//			stmt = conn.createStatement();
+//			rset = stmt.executeQuery(query);
+//			
+//			rset.next();
+//			int empNo = rset.getInt("EMPNO"); // 7369
+//			String eName = rset.getString("ENAME"); // SMITH
+//			String job = rset.getString("JOB");
+//			int mgr = rset.getInt("MGR");
+//			Date hireDate = rset.getDate("HIREDATE");
+//			int sal = rset.getInt("SAL");
+//			int comm = rset.getInt("COMM");
+//			int deptNo = rset.getInt("DEPTNO");
+//			
+//			tmpEmp = new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo);
+//			
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if(rset != null) rset.close();
+//				if(stmt != null) stmt.close();
+//				if(conn != null) conn.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return tmpEmp;
+//	}
 
 	public int insertEmp(Emp emp) {
 		int result = 0;
@@ -236,6 +302,7 @@ public class EmpDAO {
 			stmt = conn.createStatement();
 			stmt.executeQuery(query);
 			
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			result = 1;
@@ -284,6 +351,53 @@ public class EmpDAO {
 		}
 
 		return result;
+	}
+
+	public Emp selectOne2(int empNO, String empName) {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		Emp emp = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+
+			String query = "SELECT * FROM EMP WHERE EMPNO = "+ empNO + " AND ENAME = UPPER(\'" + empName + "\')";
+			
+			
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+
+			if(rset.next()) {
+				
+				int empNo = rset.getInt("EMPNO");
+				String eName = rset.getString("ENAME");
+				String job = rset.getString("JOB");
+				int mgr = rset.getInt("MGR");
+				Date hireDate = rset.getDate("HIREDATE");
+				int sal = rset.getInt("SAL");
+				int comm = rset.getInt("COMM");
+				int deptNo = rset.getInt("DEPTNO");
+				
+				emp = new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rset != null) rset.close();
+				if(stmt != null) stmt.close();
+				if(conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return emp;
 	}
 
 }

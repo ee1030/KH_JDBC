@@ -31,6 +31,8 @@ public class EmpView {
 				System.out.println("3. 새로운 사원 정보 추가");
 				System.out.println("4. 사번으로 사원 정보 수정");
 				System.out.println("5. 사번으로 사원 정보 삭제");
+				System.out.println("6. 사번, 이름으로 사원 정보 조회");
+				
 				System.out.println("0. 프로그램 종료");
 				System.out.println("====================================");
 				
@@ -40,10 +42,11 @@ public class EmpView {
 				
 				switch(sel) {
 				case 1 : selectAll(); break; // 1-1번 같은 클래스에 있는 selectAll() 호출
-				case 2 : selectByEmpNo(); break;
+				case 2 : selectOne(); break; // 2_1. 같은 클래스에 있는 selectOne() 호출
 				case 3 : insertEmp(); break;
 				case 4 : updateEmp(); break;
 				case 5 : deleteEmpByEmpNo(); break;
+				case 6 : selectOne2(); break;
 				case 0 : System.out.println("종료한다 애송이."); break;
 				default : System.out.println("잘못 입력했데수.");
 				}
@@ -83,23 +86,50 @@ public class EmpView {
 		}		
 	}
 	
-	private void selectByEmpNo() {
-		System.out.print("검색할 사원의 사번을 입력하세요 : ");
+	// 2_2. 사번을 입력받아 사원 한명의 정보를 조회하는 View
+	private void selectOne() {
+		System.out.println("[사번으로 사원 검색]");
+		
+		System.out.print("사번 입력 : ");
 		int empNo = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.println("["+empNo+"번 사원 정보 조회]");
-		Emp emp = empService.selectByEmpNo(empNo);
+		// 2_3. 입력받은 사번을 매개변수로 하는
+		// EmpService.selectOne(empNo)을 호출하여
+		// 사원 한 명의 정보를 반환받음
+		Emp emp = empService.selectOne(empNo);
 		
+		// 2_11. 조회 결과가 있을 경우에 정보 조회
+		// 없을 경우에는 "조회 결과가 없습니다." 출력
 		if(emp == null) {
-			System.out.println("사원 정보 조회 과정에서 오류가 발생했습니다.");
+			System.out.println("조회 결과가 없습니다.");
 		} else {
-			System.out.println(emp);
+			System.out.println("사번 : " + emp.getEmpNo());
+			System.out.println("이름 : " + emp.geteName());
+			System.out.println("직책 : " + emp.getJob());
+			System.out.println("직속상사 : " + emp.getMgr());
+			System.out.println("입사일 : " + emp.getHireDate());
+			System.out.println("급여 : " + emp.getSal());
+			System.out.println("커미션 : " + emp.getComm());
+			System.out.println("부서번호 : " + emp.getDeptNo());
 		}
 	}
+
+//	private void selectOne() {
+//		System.out.print("검색할 사원의 사번을 입력하세요 : ");
+//		int empNo = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.println("["+empNo+"번 사원 정보 조회]");
+//		Emp emp = empService.selectOne(empNo);
+//		
+//		if(emp == null) {
+//			System.out.println("사원 정보 조회 과정에서 오류가 발생했습니다.");
+//		} else {
+//			System.out.println(emp);
+//		}
+//	}
 	
-
-
 	private void insertEmp() {
 		System.out.println("[새로운 사원 정보 추가]");
 		System.out.print("새로운 사원의 사번 : ");
@@ -198,6 +228,32 @@ public class EmpView {
 			System.out.println(empNo + "번 사원 정보 삭제에 성공했습니다.");
 		} else {
 			System.out.println(empNo + "번 사원 정보 삭제에 실패했습니다.");
+		}
+	}
+
+	private void selectOne2() {
+
+		System.out.println("[사번, 이름으로 사원 정보 조회]");
+		System.out.print("사번 입력 : ");
+		int empNo = sc.nextInt();
+		sc.nextLine();
+		System.out.print("이름 입력 : ");
+		String eName = sc.nextLine();
+		
+		Emp emp = empService.selectOne2(empNo, eName);
+		
+		System.out.println("[조회 결과]");
+		if(emp == null) {
+			System.out.println("조회 결과가 없습니다.");
+		} else {
+			System.out.println("사번 : " + emp.getEmpNo());
+			System.out.println("이름 : " + emp.geteName());
+			System.out.println("직책 : " + emp.getJob());
+			System.out.println("직속상사 : " + emp.getMgr());
+			System.out.println("입사일 : " + emp.getHireDate());
+			System.out.println("급여 : " + emp.getSal());
+			System.out.println("커미션 : " + emp.getComm());
+			System.out.println("부서번호 : " + emp.getDeptNo());
 		}
 	}
 }
