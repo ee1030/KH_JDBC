@@ -25,6 +25,14 @@ public class Emp {
 	
 	public Emp() {} // 기본 생성자	
 
+	public Emp(int empNo, String job, int sal, int comm) {
+		super();
+		this.empNo = empNo;
+		this.job = job;
+		this.sal = sal;
+		this.comm = comm;
+	}
+
 	public Emp(int empNo, String eName, String job, int mgr, int sal, int comm, int deptNo) {
 		super();
 		this.empNo = empNo;

@@ -45,7 +45,7 @@ public class EmpView {
 				case 2 : selectOne(); break; // 2_1. 같은 클래스에 있는 selectOne() 호출
 				case 3 : insertEmp(); break;
 				case 4 : updateEmp(); break;
-				case 5 : deleteEmpByEmpNo(); break;
+				case 5 : deleteEmp(); break;
 				case 6 : selectOne2(); break;
 				case 0 : System.out.println("종료한다 애송이."); break;
 				default : System.out.println("잘못 입력했데수.");
@@ -61,6 +61,7 @@ public class EmpView {
 			
 		} while(sel != 0);
 	}
+
 
 	// 1_2. 전체 사원 정보를 출력하는 View
 	private void selectAll() {
@@ -104,6 +105,7 @@ public class EmpView {
 		if(emp == null) {
 			System.out.println("조회 결과가 없습니다.");
 		} else {
+			System.out.println("\n[" + emp.geteName() + " 사원 정보]");
 			System.out.println("사번 : " + emp.getEmpNo());
 			System.out.println("이름 : " + emp.geteName());
 			System.out.println("직책 : " + emp.getJob());
@@ -150,15 +152,15 @@ public class EmpView {
 		
 		// HIREDATE는 insert 구문에서 SYSDATE로 작성
 		
-		System.out.println("급여 : ");
+		System.out.print("급여 : ");
 		int sal = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.println("커미션 : ");
+		System.out.print("커미션 : ");
 		int comm = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.println("부서 번호 : ");
+		System.out.print("부서 번호 : ");
 		int deptNo = sc.nextInt();
 		sc.nextLine();
 		
@@ -168,7 +170,14 @@ public class EmpView {
 		
 		// 3_2. EmpService 객체의 insertEmp(emp) 메소드를 호출하여
 		// 데이터를 DB 삽입한 후 결과를 반환 받음
-		empService.insertEmp(emp);
+		int result = empService.insertEmp(emp);
+		
+		// 3_13. 삽입 결과에 따라 출력하기
+		if(result > 0) {
+			System.out.println(result + "개의 사원 정보 삽입 성공.");
+		} else {
+			System.out.println("사원 정보 추가에 실패했습니다.");
+		}
 		
 	}
 	
@@ -212,66 +221,152 @@ public class EmpView {
 //		}
 //		
 //	}
+	
 
+	// 4. 사번으로 사원 정보 수정
 	private void updateEmp() {
-		System.out.println("[기존 사원 정보 수정]");
+		System.out.println("[사원 정보 수정]");
 		
-		System.out.print("수정할 사원의 사번을 입력하세요 : ");
-		int CurrEmpNo = sc.nextInt();
-		sc.nextLine();
-		
-		System.out.print("사원의 수정할 사번 : ");
+		// 1단계 : 사번을 입력받아 해당 사번을 가진 사원이 있는지 확인
+		System.out.print("정보를 수정할 사원의 사번 입력 : ");
 		int empNo = sc.nextInt();
 		sc.nextLine();
 		
-		System.out.print("사원의 수정할 이름 : ");
-		String eName = sc.nextLine();
+		// selectOne(empNo) 재활용 -> 권장하는 방법은 아님
+		// Emp tmp = empService.selectOne(empNo);
+		// existEmp(empNo) 메소드를 새로 작성
+		int check = empService.existsEmp(empNo);
 		
-		System.out.print("사원의 수정할 직책 : ");
-		String job = sc.nextLine();
-		
-		System.out.print("사원의 수정할 직속상사 사번 : ");
-		int mgr = sc.nextInt();
-		sc.nextLine();
-		
-		System.out.print("사원의 수정할 입사일(yyyy-mm-dd) : ");
-		Date hireDate = Date.valueOf(sc.nextLine());
-		
-		System.out.print("사원의 수정할 급여 : ");
-		int sal = sc.nextInt();
-		sc.nextLine();
-		
-		System.out.print("사원의 수정할 성과급 : ");
-		int comm = sc.nextInt();
-		sc.nextLine();
-		
-		System.out.print("사원의 수정할 부서번호 : ");
-		int deptNo = sc.nextInt();
-		sc.nextLine();
-		
-		int result = empService.updateEmp(CurrEmpNo, new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo));
-		
-		if(result == 0) {
-			System.out.println("사원 정보 수정을 성공했습니다.");
+		// 2단계 : 1단계의 결과가 있다고 판별된 경우
+		//		   수정할 정보를 입력받은 후 DB 내용을 수정
+		if(check > 0) {
+			// 수정할 정보 입력 받기
+			System.out.print("직책 : ");
+			String job = sc.nextLine();
+			
+			System.out.print("급여 : ");
+			int sal = sc.nextInt();
+			sc.nextLine();
+			
+			System.out.print("커미션 : ");
+			int comm = sc.nextInt();
+			sc.nextLine();
+			
+			// 입력받은 값을 한번에 전달하기 위한 Emp객체 생성
+			Emp emp = new Emp(empNo, job, sal, comm);
+			
+			// 생성한 Emp 객체를 DB에 전달하고 결과를 반환받기
+			// -> DML 수행 결과가 행의 개수(int형)로 반환될 것을 예상해서
+			//    미리 int result로 수행 결과를 받도록 작성.
+			int result = empService.updateEmp(emp);
+			
+			// DB 수정 결과에 따른 결과 출력
+			if(result > 0) {
+				System.out.println("수정 성공쓰");
+			} else {
+				System.out.println("수정에 실패해버렸다...");
+			}
+			
 		} else {
-			System.out.println("사원 정보 수정에 실패했습니다.");
+			System.out.println("해당 사원이 존재하지 않습니다.");
 		}
+	}
+
+//	private void updateEmp() {
+//		System.out.println("[기존 사원 정보 수정]");
+//		
+//		System.out.print("수정할 사원의 사번을 입력하세요 : ");
+//		int CurrEmpNo = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("사원의 수정할 사번 : ");
+//		int empNo = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("사원의 수정할 이름 : ");
+//		String eName = sc.nextLine();
+//		
+//		System.out.print("사원의 수정할 직책 : ");
+//		String job = sc.nextLine();
+//		
+//		System.out.print("사원의 수정할 직속상사 사번 : ");
+//		int mgr = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("사원의 수정할 입사일(yyyy-mm-dd) : ");
+//		Date hireDate = Date.valueOf(sc.nextLine());
+//		
+//		System.out.print("사원의 수정할 급여 : ");
+//		int sal = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("사원의 수정할 성과급 : ");
+//		int comm = sc.nextInt();
+//		sc.nextLine();
+//		
+//		System.out.print("사원의 수정할 부서번호 : ");
+//		int deptNo = sc.nextInt();
+//		sc.nextLine();
+//		
+//		int result = empService.updateEmp(CurrEmpNo, new Emp(empNo, eName, job, mgr, hireDate, sal, comm, deptNo));
+//		
+//		if(result == 0) {
+//			System.out.println("사원 정보 수정을 성공했습니다.");
+//		} else {
+//			System.out.println("사원 정보 수정에 실패했습니다.");
+//		}
+//	}
+	
+	// 사원 정보 삭제 View
+	private void deleteEmp() {
+		// 1단계 : 입력받은 사번을 가진 사원이 존재하는지 확인
+		System.out.println("[사원 삭제]");
+		System.out.print("삭제할 사원의 사번 입력 : ");
+		int empNo = sc.nextInt();
+		sc.nextLine();
+		
+		int check = empService.existsEmp(empNo);
+		
+		// 2단계 : 1단계 결과가 있다고 판별된 경우
+		// "정말 삭제하시겠습니까?(Y/N)" 출력 후
+		// 'Y'를 입력한 경우 DB에서 삭제
+		if(check > 0) {
+			System.out.print("정말 삭제 하시겠습니까?(Y/N) : ");
+			char check_YN = sc.nextLine().toUpperCase().charAt(0);
+			
+			if(check_YN == 'Y') {
+				int result = empService.deleteEmp(empNo);
+				
+				if(result > 0) {
+					System.out.println("삭제에 성공했데수");
+				} else {
+					System.out.println("삭제 실패했데수");
+				}
+			} else {
+				System.out.println("쫄보ㅋㅋㅋㅋ 취소했데수");
+			}
+			
+		} else {
+			System.out.println("사원을 찾을 수 없데수");
+		}
+
+		
 	}
 	
-	private void deleteEmpByEmpNo() {
-		System.out.println("[사번으로 사원 정보 삭제]");
-		System.out.print("삭제할 사원의 사번을 입력하세요 : ");
-		int empNo = sc.nextInt();
-		sc.nextLine();
-		
-		int result = empService.deleteEmpByEmpNo(empNo);
-		
-		if(result == 0) {
-			System.out.println(empNo + "번 사원 정보 삭제에 성공했습니다.");
-		} else {
-			System.out.println(empNo + "번 사원 정보 삭제에 실패했습니다.");
-		}
-	}
+//	private void deleteEmpByEmpNo() {
+//		System.out.println("[사번으로 사원 정보 삭제]");
+//		System.out.print("삭제할 사원의 사번을 입력하세요 : ");
+//		int empNo = sc.nextInt();
+//		sc.nextLine();
+//		
+//		int result = empService.deleteEmpByEmpNo(empNo);
+//		
+//		if(result == 0) {
+//			System.out.println(empNo + "번 사원 정보 삭제에 성공했습니다.");
+//		} else {
+//			System.out.println(empNo + "번 사원 정보 삭제에 실패했습니다.");
+//		}
+//	}
 
 	private void selectOne2() {
 

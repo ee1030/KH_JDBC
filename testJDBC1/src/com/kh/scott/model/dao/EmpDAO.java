@@ -68,7 +68,7 @@ public class EmpDAO {
 			
 			// 1_7. DB 접속 성공 시
 			// 이를 전달하여 결과를 얻어올 객체 Statement를 생성
-			String query = "SELECT * FROM EMP";
+			String query = "SELECT * FROM EMP ORDER BY EMPNO";
 			// ***** 주의사항 *****
 			// JAVA 단에서 SQL 구문 작성 시 세미콜론 붙이면 큰일남
 			
@@ -237,7 +237,7 @@ public class EmpDAO {
 //	}
 	
 	// 3. 새로운 사원 정보 삽입용 DAO
-	public void insertEmp(Emp emp) {
+	public int insertEmp(Emp emp) {
 		
 		// 3_4. JDBC 드라이버 등록 및 DB 연결 관련 변수 선언
 		Connection conn = null;
@@ -285,11 +285,27 @@ public class EmpDAO {
 			// DML 구문 수행 시 excuteUpdate() 호출
 			// DB에서 DML구문 수행 시 DML 구문 수행이 성공한 행의 개수를 반환 
 			result = pstmt.executeUpdate();
+			// executeUpdate() : DML의 성공한 행의 개수를 반환
+			// executeQuery() : SELECT문의 조회 결과인 ResultSet을 반환
+			
+			// 트랜잭션 처리(commit, rollback 처리)
+			if(result > 0) conn.commit();
+			else conn.rollback();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				// 3_10. 사용한 JDBC 객체를 반환
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
+		// 3_11. DB 수행 결과 Service로 반환
+		return result;
 	}
 
 //	public int insertEmp(Emp emp) {
@@ -332,45 +348,39 @@ public class EmpDAO {
 //		
 //		return result;
 //	}
-
-	public int updateEmp(int currEmpNo, Emp emp) {
-		int result = 0;
-		
+	
+	// 사원 정보 수정용 DAO
+	public int updateEmp(Emp emp) {
+		// JDBC 드라이버 등록 및 DB연결 관련 변수 선언
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
+		int result = 0; // 결과 저장용 변수
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
 			
-			int empNo = emp.getEmpNo();
-			String eName = emp.geteName();
-			String job = emp.getJob();
-			int mgr = emp.getMgr();
-			Date hireDate = emp.getHireDate();
-			int sal = emp.getSal();
-			int comm = emp.getComm();
-			int deptNo = emp.getDeptNo();
+			conn.setAutoCommit(false); // DML 자동커밋 방지
+			String query = "UPDATE EMP SET JOB=?, SAL=?, COMM=? WHERE EMPNO=?";
 			
-			String query = "UPDATE EMP SET EMPNO = " + empNo + ", ENAME = '" + eName + "', JOB = '" + job + "', MGR = " 
-						+ mgr + ", HIREDATE = '" + hireDate + "', SAL = " + sal + ", COMM = " + comm + ", DEPTNO = " + deptNo
-						+ "WHERE EMPNO = " + currEmpNo;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, emp.getJob());
+			pstmt.setInt(2, emp.getSal());
+			pstmt.setInt(3, emp.getComm());
+			pstmt.setInt(4, emp.getEmpNo());
 			
-			stmt = conn.createStatement();
-			stmt.executeQuery(query);
+			result = pstmt.executeUpdate();
 			
+			if(result > 0) conn.commit();
+			else conn.rollback();
 			
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			result = 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			result = 1;
-		} finally {
+		} finally { // JDBC 객체 반환
 			try {
-				if(stmt != null) stmt.close();
+				if(pstmt != null) pstmt.close();
 				if(conn != null) conn.close();
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -378,37 +388,82 @@ public class EmpDAO {
 		return result;
 	}
 
-	public int deleteEmpByEmpNo(int empNo) {
-		int result = 0;
-		
-		Connection conn = null;
-		Statement stmt = null;
-		
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
-			String query = "DELETE FROM EMP WHERE EMPNO = " + empNo;
-			
-			stmt = conn.createStatement();
-			stmt.executeQuery(query);
-			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			result = 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			result = 1;
-		} finally {
-			try {
-				if(stmt != null) stmt.close();
-				if(conn != null) conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+//	public int updateEmp(int currEmpNo, Emp emp) {
+//		int result = 0;
+//		
+//		Connection conn = null;
+//		Statement stmt = null;
+//		
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+//			
+//			int empNo = emp.getEmpNo();
+//			String eName = emp.geteName();
+//			String job = emp.getJob();
+//			int mgr = emp.getMgr();
+//			Date hireDate = emp.getHireDate();
+//			int sal = emp.getSal();
+//			int comm = emp.getComm();
+//			int deptNo = emp.getDeptNo();
+//			
+//			String query = "UPDATE EMP SET EMPNO = " + empNo + ", ENAME = '" + eName + "', JOB = '" + job + "', MGR = " 
+//						+ mgr + ", HIREDATE = '" + hireDate + "', SAL = " + sal + ", COMM = " + comm + ", DEPTNO = " + deptNo
+//						+ "WHERE EMPNO = " + currEmpNo;
+//			
+//			stmt = conn.createStatement();
+//			stmt.executeQuery(query);
+//			
+//			
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			result = 1;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			result = 1;
+//		} finally {
+//			try {
+//				if(stmt != null) stmt.close();
+//				if(conn != null) conn.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return result;
+//	}
 
-		return result;
-	}
+//	public int deleteEmpByEmpNo(int empNo) {
+//		int result = 0;
+//		
+//		Connection conn = null;
+//		Statement stmt = null;
+//		
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+//			String query = "DELETE FROM EMP WHERE EMPNO = " + empNo;
+//			
+//			stmt = conn.createStatement();
+//			stmt.executeQuery(query);
+//			
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			result = 1;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			result = 1;
+//		} finally {
+//			try {
+//				if(stmt != null) stmt.close();
+//				if(conn != null) conn.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		return result;
+//	}
 
 	public Emp selectOne2(int empNO, String empName) {
 		Connection conn = null;
@@ -456,6 +511,76 @@ public class EmpDAO {
 
 		return emp;
 	}
+	
+	// 아번이 일치하는 사원 유무 판단용 DAO
+	public int existsEmp(int empNo) {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		int result = 0;
+		
+		try {
+			// JDBC 드라이버 로드 및 커넥션 얻어오기
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+			
+			// SQL 작성 및 Statement 객체 생성
+			String query = "SELECT COUNT(*) FROM EMP WHERE EMPNO = " + empNo;
+			stmt = conn.createStatement();
+			
+			// SQL 수행 및 결과 반환
+			rset = stmt.executeQuery(query);
+			
+			// 조회 결과가 있을 경우 해당 결과를 result에 저장
+			if(rset.next()) {
+				result = rset.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rset != null) rset.close();
+				if(stmt != null) stmt.close();
+				if(conn != null) conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 
+	public int deleteEmp(int empNo) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
+			
+			String query = "DELETE FROM EMP WHERE EMPNO = " + empNo;
+			
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(query);
+			result = pstmt.executeUpdate(query);
+			
+			if(result > 0) conn.commit();
+			else conn.rollback();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 
 }
