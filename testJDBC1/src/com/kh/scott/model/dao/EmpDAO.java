@@ -560,10 +560,12 @@ public class EmpDAO {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "scott", "tiger");
 			
-			String query = "DELETE FROM EMP WHERE EMPNO = " + empNo;
+			String query = "DELETE FROM EMP WHERE EMPNO = ?";
 			
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, empNo);
+			
 			result = pstmt.executeUpdate(query);
 			
 			if(result > 0) conn.commit();
