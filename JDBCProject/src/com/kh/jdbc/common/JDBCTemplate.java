@@ -3,6 +3,8 @@ package com.kh.jdbc.common;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class JDBCTemplate {
@@ -64,4 +66,64 @@ public class JDBCTemplate {
 		return conn;
 	}
 	
+	// 트랜잭션 처리(commit, rollback)도 공통적으로 사용함
+	// static으로 미리 선언 코드길이 감소 효과 + 재사용성
+	public static void commit(Connection conn) {
+		try {
+			if(conn != null && !conn.isClosed()) {
+				// 참조하고 있는 커넥션이 닫혀있지 않은 경우
+				conn.commit();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void rollback(Connection conn) {
+		try {
+			if(conn != null && !conn.isClosed()) {
+				// 참조하고 있는 커넥션이 닫혀있지 않은 경우
+				conn.rollback();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// DB 연결 자원 반환 구문도 static으로 작성
+	public static void close(Connection conn) {
+		try {
+			if(conn != null && !conn.isClosed()) {
+				// 참조하고 있는 커넥션이 닫혀있지 않은 경우
+				conn.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void close(ResultSet rset) {
+		try {
+			if(rset != null && !rset.isClosed()) {
+				// 참조하고 있는 ResultSet이 닫혀있지 않은 경우
+				rset.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Statement, PreparedStatement 두 객체를 반환하는 메소드
+	// 어떻게? PreparedStatement는 Statement의 자식이므로
+	// 매개변수 stmt에 다형성이 적용되어 자식 객체인 PreparedStatement를 참조 가능
+	public static void close(Statement stmt) {
+		try {
+			if(stmt != null && !stmt.isClosed()) {
+				// 참조하고 있는 Statement가 닫혀있지 않은 경우
+				stmt.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
