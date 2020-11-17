@@ -17,12 +17,18 @@ public class Member {
 	
 
 	public Member(String memId, String memPw, String memNm, String phone, char gender) {
-		super();
 		this.memId = memId;
 		this.memPw = memPw;
 		this.memNm = memNm;
 		this.phone = phone;
 		this.gender = gender;
+	}	
+	
+	// 로그인용 생성자
+	public Member(int memNo, String memId, String memNm, String phone, char gender, Date hireDt) {
+		this(memId, memId, memNm, phone, gender);
+		this.memNo = memNo;
+		this.hireDt = hireDt;
 	}
 
 	public Member(int memNo, String memId, String memPw, String memNm, String phone, char gender, Date hireDt,
