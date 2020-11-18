@@ -4,6 +4,8 @@ package com.kh.jdbc.member.model.service;
 import static com.kh.jdbc.common.JDBCTemplate.*;
 
 import java.sql.Connection;
+import java.util.List;
+
 import com.kh.jdbc.member.model.dao.MemberDAO;
 import com.kh.jdbc.member.model.vo.Member;
 
@@ -53,6 +55,11 @@ public class MemberService {
 		close(conn);
 		
 		return loginMember;
+	}
+
+	public List<Member> selectMemberName(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

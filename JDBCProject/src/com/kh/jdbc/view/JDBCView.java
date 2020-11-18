@@ -1,6 +1,7 @@
 package com.kh.jdbc.view;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.kh.jdbc.member.model.service.MemberService;
@@ -62,7 +63,7 @@ public class JDBCView {
 					System.out.println();
 					
 					switch(sel) {
-					case 1 : break;
+					case 1 : memberMenu(); break;
 					case 9 : 
 						loginMember = null;
 						System.out.println("로그아웃했데수");
@@ -154,5 +155,89 @@ public class JDBCView {
 		}
 		
 	}
+	
+
+	/** 
+	 * 회원 기능 메뉴 View
+	 */
+	private void memberMenu() {
+		int sel = 0;
+		
+		do {
+			try {
+				System.out.println("=========================================");
+				System.out.println("             ★~ 회원기능 ~★              ");
+				System.out.println("1. 내 정보 조회");
+				System.out.println("2. 검색어가 이름에 포함된 모든 회원 검색");
+				System.out.println("3. 내 정보 수정");
+				System.out.println("4. 비밀번호 변경");
+				System.out.println("5. 회원 탈퇴");
+				System.out.println("0. 메인메뉴로 돌아가기");
+				System.out.println("=========================================");
+				System.out.print("메뉴 입력 >> ");
+				sel = sc.nextInt();
+				sc.nextLine();
+				
+				switch(sel) {
+				case 1 : selectMyInfo(); break;
+				case 2 : selectMemberName(); break;
+				case 3 : break;
+				case 4 : break;
+				case 5 : break;
+				case 0 : System.out.println("메인메뉴로 돌아가겠다능"); break;
+				default : System.out.println("잘못 입력하셨다능");
+				}
+				
+			}catch (InputMismatchException e) {
+				System.out.println("숫자만 입력해주세요.");
+				sel = -1;
+				sc.nextLine();
+			}
+			
+		} while(sel != 0);
+		
+	}
+
+	/** 
+	 * 내 정보 조회 View
+	 */
+	private void selectMyInfo() {
+		// DB에서 회원 정보를 조회할 필요 없이
+		// loginMember에 담겨있는 값을 이용해 출력
+		System.out.println("             ★~ 나의 정보 ~★              ");
+		System.out.println("회원 번호 : " + loginMember.getMemNo());
+		System.out.println("아이디 : " + loginMember.getMemId());
+		System.out.println("이름 : " + loginMember.getMemNm());
+		System.out.println("전화번호 : " + loginMember.getPhone());
+		System.out.println("성별 : " + loginMember.getGender());
+		System.out.println("가입일자 : " + loginMember.getHireDt());
+	}
+	
+
+	/**
+	 * 회원 이름에 검색어가 포함되는 모든 회원 조회
+	 */
+	private void selectMemberName() {
+		// 1. 검색어를 입력받기
+		System.out.println("             ★~ 이름이 포함된 사람 검색 ~★              ");
+		System.out.print("검색할 단어 : ");
+		String name = sc.nextLine();
+		
+		// 2. service에 알맞은 메소드 호출 후 결과 반환 받기
+		try {
+			List<Member> list = mService.selectMemberName(name);
+			
+			// 3. 결과로 List<Member>를 반환 받고 모두 출력
+			
+			
+		} catch(Exception e) {
+			System.out.println("이름찾다 오류났데수");
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
 
 }
