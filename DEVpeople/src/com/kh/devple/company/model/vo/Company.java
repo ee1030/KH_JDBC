@@ -12,10 +12,11 @@ public class Company {
 	private String email;
 	private String comment;
 	private int devNo;
+	private char cScsnFl;
 	
 	public Company() {}
-	
-	public Company(int comNo, String comNm, String phone, String email, String comment, int devNo) {
+
+	public Company(int comNo, String comNm, String phone, String email, String comment, int devNo, char cScsnFl) {
 		super();
 		this.comNo = comNo;
 		this.comNm = comNm;
@@ -23,6 +24,7 @@ public class Company {
 		this.email = email;
 		this.comment = comment;
 		this.devNo = devNo;
+		this.cScsnFl = cScsnFl;
 	}
 
 	public int getComNo() {
@@ -73,9 +75,20 @@ public class Company {
 		this.devNo = devNo;
 	}
 
+	public char getcScsnFl() {
+		return cScsnFl;
+	}
+
+	public void setcScsnFl(char cScsnFl) {
+		this.cScsnFl = cScsnFl;
+	}
+
 	@Override
 	public String toString() {
 		return "Company [comNo=" + comNo + ", comNm=" + comNm + ", phone=" + phone + ", email=" + email + ", comment="
-				+ comment + ", devNo=" + devNo + "]";
+				+ comment + ", devNo=" + devNo + ", cScsnFl=" + cScsnFl + "]";
 	}
+	
+	
+
 }
