@@ -392,7 +392,6 @@ public class JDBCView {
 				e.printStackTrace();
 			}
 			
-			
 		} else {
 			System.out.println("엌ㅋㅋㅋ쫄봌ㅋㅋㅋㅋㅋㅋ 아직도 대가리가 덜 깨졌데수 ㅋㅋㅋㅋㅋㅋ");
 		}
