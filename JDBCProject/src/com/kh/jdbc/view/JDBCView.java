@@ -165,6 +165,8 @@ public class JDBCView {
 		
 		do {
 			try {
+				if(loginMember == null) return;
+				// 회원 탈퇴로 인해 로그아웃 될 경우 메인 메뉴로 리턴
 				System.out.println("=========================================");
 				System.out.println("             ★~ 회원기능 ~★              ");
 				System.out.println("1. 내 정보 조회");
@@ -184,7 +186,7 @@ public class JDBCView {
 				case 2 : selectMemberName(); break;
 				case 3 : updateMyInfo(); break;
 				case 4 : updatePw(); break;
-				case 5 : break;
+				case 5 : updateSecessionMember(); break;
 				case 6 : selectGender(); break;
 				case 0 : System.out.println("메인메뉴로 돌아가겠다능"); break;
 				default : System.out.println("잘못 입력하셨다능");
@@ -199,7 +201,6 @@ public class JDBCView {
 		} while(sel != 0);
 		
 	}
-
 
 	/** 
 	 * 내 정보 조회 View
@@ -354,8 +355,47 @@ public class JDBCView {
 				System.out.println("비밀번호 바꾸다 오류났데수...");
 				e.printStackTrace();
 			}
-			
 		}
-		
 	}
+	
+	/**
+	 * 회원 탈퇴 View
+	 */
+	private void updateSecessionMember() {
+		System.out.println("           ★~ 회원 탈퇴 ~★            ");
+		System.out.println("======================================");
+		System.out.print("비밀번호 입력 : ");
+		String memPw = sc.nextLine(); // 일치여부는 DB에서 확인
+		
+		System.out.print("*** ㄹㅇ루 삭제 허싈?(Y,N) : ");
+		char check = sc.nextLine().toUpperCase().charAt(0);
+		System.out.println("======================================");
+		
+		if(check == 'Y') {
+			// 삭제 진행
+			try {
+				Member upMember = new Member();
+				upMember.setMemNo(loginMember.getMemNo());
+				upMember.setMemPw(memPw);
+				
+				int result = mService.updateSecessionMember(upMember);
+				
+				if(result > 0) {
+					System.out.println("탈퇴가 잘 됐데수");
+					loginMember = null;
+				} else {
+					System.out.println("비밀번호 틀렸데수");
+				}
+				
+			} catch (Exception e) {
+				System.out.println("탈퇴 과정에서 오류 났데수...");
+				e.printStackTrace();
+			}
+			
+			
+		} else {
+			System.out.println("엌ㅋㅋㅋ쫄봌ㅋㅋㅋㅋㅋㅋ 아직도 대가리가 덜 깨졌데수 ㅋㅋㅋㅋㅋㅋ");
+		}
+	}
+
 }

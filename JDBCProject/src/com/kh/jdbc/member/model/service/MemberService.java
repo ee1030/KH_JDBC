@@ -137,4 +137,22 @@ public class MemberService {
 		return result;
 	}
 
+	/** 회원탈퇴 Service
+	 * @param upMember
+	 * @return result
+	 * @throws Exception
+	 */
+	public int updateSecessionMember(Member upMember) throws Exception {
+		Connection conn = getConnection();
+		
+		int result = mDAO.updateSecessionMember(conn, upMember);
+		
+		if(result > 0) conn.commit();
+		else conn.rollback();
+		
+		close(conn);
+		
+		return result;
+	}
+
 }

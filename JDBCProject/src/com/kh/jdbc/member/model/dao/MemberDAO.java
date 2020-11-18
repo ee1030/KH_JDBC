@@ -227,4 +227,24 @@ public class MemberDAO {
 		
 		return result;
 	}
+
+	public int updateSecessionMember(Connection conn, Member upMember) throws Exception {
+		int result = 0;
+		
+		try {
+			String query = prop.getProperty("updateSecessionMember");
+			
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setInt(1, upMember.getMemNo());
+			pstmt.setString(2, upMember.getMemPw());
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
 }
