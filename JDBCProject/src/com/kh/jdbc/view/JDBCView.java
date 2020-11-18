@@ -172,6 +172,7 @@ public class JDBCView {
 				System.out.println("3. 내 정보 수정");
 				System.out.println("4. 비밀번호 변경");
 				System.out.println("5. 회원 탈퇴");
+				System.out.println("6. 성별 조회");				
 				System.out.println("0. 메인메뉴로 돌아가기");
 				System.out.println("=========================================");
 				System.out.print("메뉴 입력 >> ");
@@ -181,9 +182,10 @@ public class JDBCView {
 				switch(sel) {
 				case 1 : selectMyInfo(); break;
 				case 2 : selectMemberName(); break;
-				case 3 : break;
-				case 4 : break;
+				case 3 : updateMyInfo(); break;
+				case 4 : updatePw(); break;
 				case 5 : break;
+				case 6 : selectGender(); break;
 				case 0 : System.out.println("메인메뉴로 돌아가겠다능"); break;
 				default : System.out.println("잘못 입력하셨다능");
 				}
@@ -197,6 +199,7 @@ public class JDBCView {
 		} while(sel != 0);
 		
 	}
+
 
 	/** 
 	 * 내 정보 조회 View
@@ -228,16 +231,131 @@ public class JDBCView {
 			List<Member> list = mService.selectMemberName(name);
 			
 			// 3. 결과로 List<Member>를 반환 받고 모두 출력
-			
+			if(list.isEmpty()) { // 리스트가 비어있다 == 조회 결과가 없다.
+				System.out.println("조회 결과가 없습니다.");
+			} else {
+				for(Member m : list) {
+					System.out.printf("%s / %s / %s / %c / %s\n", m.getMemId(), m.getMemNm(), m.getPhone(), m.getGender(), m.getHireDt());
+				}
+			}
 			
 		} catch(Exception e) {
 			System.out.println("이름찾다 오류났데수");
 			e.printStackTrace();
 		}
+
+	}
+	
+	/**
+	 * 성별 검색 View
+	 */
+	private void selectGender() {
+		// 성별(M 또는 F, 대소문자 구분 X)를 입력받아
+		// DB에서 일치하는 회원을 모두 조회
+		// 아이디, 이름, 전화번호 마지막 자리, 성별만 출력
+		System.out.println("             ★~ 성별 검색 ~★              ");
+		System.out.print("성별 입력 : ");
+		char gender = sc.nextLine().toUpperCase().charAt(0);
 		
-		
+		try {
+			List<Member> list = mService.selectGender(gender);
+			
+			if(list.isEmpty()) {
+				System.out.println("같은 성별의 조회 결과가 존재하지 않습니다.");
+			} else {
+				for(Member m : list) {
+					System.out.printf("%s / %s / %s / %c\n", m.getMemId(), m.getMemNm(), m.getPhone(), m.getGender());
+				}
+			}
+			
+		}catch (Exception e) {
+			System.out.println("성별 검색 중 오류가 발생했습니다.");
+			e.printStackTrace();
+		}
 		
 	}
-
-
+	
+	/**
+	 * 내 정보 수정 View
+	 */
+	private void updateMyInfo() {
+		System.out.println("           ★~ 내 정보 수정 ~★            ");
+		System.out.println("=========================================");
+		System.out.print("이름 : ");
+		String memNm = sc.nextLine();
+		
+		System.out.print("전화번호 : ");
+		String phone = sc.nextLine();
+		
+		System.out.print("성별 : ");
+		char gender = sc.nextLine().toUpperCase().charAt(0);
+		System.out.println("=========================================");
+		
+		// 입력받은 값 + 회원 번호를 저장할 Member 객체 생성
+		Member upMember = new Member(loginMember.getMemNo(), memNm, phone, gender);
+		
+		try {
+			// 생성한 member 객체를 매개변수로 하여 Service 메소드 호출 및 결과 반환
+			int result = mService.updateMyInfo(upMember);
+			
+			if(result > 0) {
+				System.out.println("정보 수정에 성공했데수");
+				
+				// loginMember는 수정전 데이터를 가지고 있으므로
+				// 수정 성공시 데이터를 최신화 하여야 함
+				loginMember.setMemNm(memNm);
+				loginMember.setPhone(phone);
+				loginMember.setGender(gender);
+				
+			} else {
+				System.out.println("그런사람 없데수...");
+			}
+		} catch (Exception e) {
+			System.out.println("정보 수정 중 오류 발생했데수");
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 비밀번호 변경용 View
+	 */
+	private void updatePw() {
+		System.out.println("           ★~ 비밀번호 변경 ~★            ");
+		System.out.println("==========================================");
+		System.out.print("현재 비밀번호 : ");
+		String currPw = sc.nextLine();
+		
+		System.out.print("새 비밀번호 : ");
+		String newPw = sc.nextLine();
+		
+		System.out.print("새 비밀번호 확인 : ");
+		String newPw2 = sc.nextLine();
+		System.out.println("==========================================");
+		
+		// 새 비밀번호가 일치하는지 판별
+		if(newPw.equals(newPw2)) { // 같을 경우
+			// 현재 비밀번호와 새 비밀번호 + 회원번호
+			
+			Member upMember = new Member();
+			upMember.setMemNo(loginMember.getMemNo()); // 회원번호
+			upMember.setMemPw(currPw); // 입력받은 현재 비밀번호
+			
+			
+			try {
+				int result = mService.updatePw(upMember, newPw);
+				
+				if(result > 0) {
+					System.out.println("비밀번호 변경에 성공했데수");
+				} else {
+					System.out.println("현재 비밀번호를 잘못 임렦헇자나...");
+				}
+				
+			} catch (Exception e) {
+				System.out.println("비밀번호 바꾸다 오류났데수...");
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
 }

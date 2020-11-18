@@ -12,9 +12,27 @@ public class Member {
 	private Date hireDt; // 가입일
 	private char scsnFl; // 탈퇴여부
 	
-	public Member() {}
+	public Member() {}	
+
 	
-	
+	// 내 정보 수정용 생성자
+	public Member(int memNo, String memNm, String phone, char gender) {
+		super();
+		this.memNo = memNo;
+		this.memNm = memNm;
+		this.phone = phone;
+		this.gender = gender;
+	}
+
+
+
+	public Member(String memId, String memNm, String phone, char gender) {
+		super();
+		this.memId = memId;
+		this.memNm = memNm;
+		this.phone = phone;
+		this.gender = gender;
+	}
 
 	public Member(String memId, String memPw, String memNm, String phone, char gender) {
 		this.memId = memId;
@@ -26,10 +44,23 @@ public class Member {
 	
 	// 로그인용 생성자
 	public Member(int memNo, String memId, String memNm, String phone, char gender, Date hireDt) {
-		this(memId, memId, memNm, phone, gender);
 		this.memNo = memNo;
+		this.memId = memId;
+		this.memNm = memNm;
+		this.phone = phone;
+		this.gender = gender;
 		this.hireDt = hireDt;
 	}
+
+	
+	public Member(String memId, String memNm, String phone, char gender, Date hireDt) {
+		this.memId = memId;
+		this.memNm = memNm;
+		this.phone = phone;
+		this.gender = gender;
+		this.hireDt = hireDt;
+	}
+
 
 	public Member(int memNo, String memId, String memPw, String memNm, String phone, char gender, Date hireDt,
 			char scsnFl) {

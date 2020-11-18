@@ -4,10 +4,11 @@ import static com.kh.jdbc.common.JDBCTemplate.*;
 
 import java.io.FileInputStream;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import com.kh.jdbc.member.model.vo.Member;
@@ -111,5 +112,119 @@ public class MemberDAO {
 		
 		// 조회 결과가 담긴 loginMember 반환
 		return loginMember;
+	}
+
+	/** 검색어 포함 이름 검색 DAO
+	 * @param conn
+	 * @param name
+	 * @return list
+	 * @throws Exception
+	 */
+	public List<Member> selectMemberName(Connection conn, String name) throws Exception {
+		// 1. 반환할 결과를 저장할 변수 List<Member> 선언
+		List<Member> list = null;
+		try {
+			// 2. SQL 작성
+			String query = prop.getProperty("selectMemberName");
+
+			// 3. PrearedStatement 객체 생성
+			pstmt = conn.prepareStatement(query);
+			
+			// 4. 위치 홀더에 알맞은 값 배치
+			pstmt.setString(1, name);
+			// 5. SQL 수행 후 결과를 반환받음
+			rset = pstmt.executeQuery();
+			list = new ArrayList<>();
+			// 6. 수행 결과를 모두 List에 담기
+			while(rset.next()) {
+				list.add(new Member(rset.getString("MEM_ID"),
+							   	    rset.getString("MEM_NM"),
+								    rset.getString("PHONE"),
+								    rset.getString("GENDER").charAt(0),
+								    rset.getDate("HIRE_DT")));
+			}
+			
+		} finally {
+			// 7. 사용한 JDBC 객체 반환
+			close(rset);
+			close(pstmt);
+		}
+		// 8. 조회 결과가 담긴 List 반환
+		return list;
+	}
+
+	public List<Member> selectGender(Connection conn, char gender) throws Exception {
+		List<Member> list = null;
+		
+		try {
+			String query = prop.getProperty("selectGender");
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, gender+"");
+			
+			rset = pstmt.executeQuery();
+			list = new ArrayList<>();
+			
+			while(rset.next()) {
+				list.add(new Member(rset.getString(1), rset.getString(2), rset.getString(3), rset.getString(4).charAt(0)));
+			}
+			
+			
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
+	}
+
+	public int updateMyInfo(Connection conn, Member upMember) throws Exception {
+		int result = 0;
+		
+		try {
+			String query = prop.getProperty("updateMyInfo");
+			
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setString(1, upMember.getMemNm());
+			pstmt.setString(2, upMember.getPhone());
+			pstmt.setString(3, upMember.getGender()+"");
+			pstmt.setInt(4, upMember.getMemNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	/** 비밀번호 변경 DAO
+	 * @param conn
+	 * @param upMember
+	 * @param newPw
+	 * @return result
+	 * @throws Exception
+	 */
+	public int updatePw(Connection conn, Member upMember, String newPw) throws Exception {
+		int result = 0;
+		
+		try {
+			String query = prop.getProperty("updatePw");
+			
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setString(1, newPw);
+			pstmt.setInt(2, upMember.getMemNo());
+			pstmt.setString(3, upMember.getMemPw());
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 }

@@ -57,9 +57,84 @@ public class MemberService {
 		return loginMember;
 	}
 
-	public List<Member> selectMemberName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	/** 검색어 포함 이름 검색 Service
+	 * @param name
+	 * @return list
+	 * @throws Exception
+	 */
+	public List<Member> selectMemberName(String name) throws Exception {
+		// 1. Connection 생성
+		Connection conn = getConnection();
+		
+		// 2. DAO에서 알맞은 메소드 호출 후 결과 반환 받기 
+		List<Member> list = mDAO.selectMemberName(conn, name);
+		
+		// 3. Connection 반환
+		close(conn);
+		
+		// ** 전화번호 가운데를 ****로 바꾸기
+		// 010-1234-1234 --> 010-****-1234
+		// 1) split() 사용
+		for(Member m : list) {
+			String[] arr = m.getPhone().split("-");
+			m.setPhone(arr[0] + "-****-" + arr[2]);
+		}
+		
+		// 4. DAO 호출 결과를 그대로 View로 반환
+		return list;
+	}
+
+	public List<Member> selectGender(char gender) throws Exception {
+		Connection conn = getConnection();
+		
+		List<Member> list = mDAO.selectGender(conn, gender);
+		
+		close(conn);
+		
+		
+//		for(Member m : list) {
+//			String[] arr = m.getPhone().split("-");
+//			m.setPhone(arr[2]);
+//			
+//			// substirng 사용
+//			String ph = m.getPhone();
+//			m.setPhone(ph.substring(ph.lastIndexOf("-")+1, ph.length()));
+//			
+//		}
+		
+		return list;
+	}
+
+	public int updateMyInfo(Member upMember) throws Exception {
+		Connection conn = getConnection();
+		
+		int result = mDAO.updateMyInfo(conn, upMember);
+		
+		if(result > 0) conn.commit();
+		else conn.rollback();
+		
+		close(conn);
+		
+		return result;
+	}
+
+	/** 비밀번호 변경 Service
+	 * @param upMember
+	 * @param newPw
+	 * @return result
+	 * @throws Exception
+	 */
+	public int updatePw(Member upMember, String newPw) throws Exception {
+		Connection conn = getConnection();
+		
+		int result = mDAO.updatePw(conn, upMember, newPw);
+		
+		if(result > 0) conn.commit();
+		else conn.rollback();
+		
+		close(conn);
+		
+		return result;
 	}
 
 }
