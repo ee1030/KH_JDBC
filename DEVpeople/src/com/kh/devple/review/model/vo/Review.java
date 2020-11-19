@@ -12,17 +12,17 @@ public class Review {
    private String title; //후기 제목
    private String content; //후기 내용
    private Date createAt; //작성일
-   private int devNo; //회원번호
+   private int memNo; //회원번호
    
    public Review() {}
 
-   public Review(int revwNo, String title, String content, Date createAt, int devNo) {
+   public Review(int revwNo, String title, String content, Date createAt, int memNo) {
       super();
       this.revwNo = revwNo;
       this.title = title;
       this.content = content;
       this.createAt = createAt;
-      this.devNo = devNo;
+      this.memNo = memNo;
    }
 
    public int getRevwNo() {
@@ -58,17 +58,17 @@ public class Review {
    }
 
    public int getDevNo() {
-      return devNo;
+      return memNo;
    }
 
-   public void setDevNo(int devNo) {
-      this.devNo = devNo;
+   public void setDevNo(int memNo) {
+      this.memNo = memNo;
    }
 
    @Override
    public String toString() {
       return "Review [revwNo=" + revwNo + ", title=" + title + ", content=" + content + ", createAt=" + createAt
-            + ", devNo=" + devNo + "]";
+            + ", memNo=" + memNo + "]";
    }
 
 }

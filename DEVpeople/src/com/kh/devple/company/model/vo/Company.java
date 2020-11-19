@@ -11,19 +11,48 @@ public class Company {
 	private String phone;
 	private String email;
 	private String comment;
-	private int devNo;
+	private int memNo;
 	private char cScsnFl;
 	
 	public Company() {}
 
-	public Company(int comNo, String comNm, String phone, String email, String comment, int devNo, char cScsnFl) {
+	
+
+	public Company(String comNm, int memNo) {
+		super();
+		this.comNm = comNm;
+		this.memNo = memNo;
+	}
+
+
+
+	public Company(String comNm, String phone, String email, String comment) {
+		super();
+		this.comNm = comNm;
+		this.phone = phone;
+		this.email = email;
+		this.comment = comment;
+	}
+
+
+
+	public Company(String comNm, String phone, String email, String comment, int memNo) {
+		super();
+		this.comNm = comNm;
+		this.phone = phone;
+		this.email = email;
+		this.comment = comment;
+		this.memNo = memNo;
+	}
+
+	public Company(int comNo, String comNm, String phone, String email, String comment, int memNo, char cScsnFl) {
 		super();
 		this.comNo = comNo;
 		this.comNm = comNm;
 		this.phone = phone;
 		this.email = email;
 		this.comment = comment;
-		this.devNo = devNo;
+		this.memNo = memNo;
 		this.cScsnFl = cScsnFl;
 	}
 
@@ -67,12 +96,12 @@ public class Company {
 		this.comment = comment;
 	}
 
-	public int getDevNo() {
-		return devNo;
+	public int getMemNo() {
+		return memNo;
 	}
 
-	public void setDevNo(int devNo) {
-		this.devNo = devNo;
+	public void setDevNo(int memNo) {
+		this.memNo = memNo;
 	}
 
 	public char getcScsnFl() {
@@ -86,7 +115,7 @@ public class Company {
 	@Override
 	public String toString() {
 		return "Company [comNo=" + comNo + ", comNm=" + comNm + ", phone=" + phone + ", email=" + email + ", comment="
-				+ comment + ", devNo=" + devNo + ", cScsnFl=" + cScsnFl + "]";
+				+ comment + ", memNo=" + memNo + ", cScsnFl=" + cScsnFl + "]";
 	}
 	
 	

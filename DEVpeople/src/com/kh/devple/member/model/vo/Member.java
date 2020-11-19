@@ -7,7 +7,7 @@ package com.kh.devple.member.model.vo;
 public class Member {
    
    // vo
-   private int devNo;
+   private int memNo;
    private String memId;
    private String memPw;
    private String memNm;
@@ -22,10 +22,10 @@ public class Member {
    public Member() {}
 
    // 매개변수 생성자
-   public Member(int devNo, String memId, String memPw, String memNm, String phone, String email, int career,
+   public Member(int memNo, String memId, String memPw, String memNm, String phone, String email, int career,
          String spec, char devYn, char scsnFl) {
       super();
-      this.devNo = devNo;
+      this.memNo = memNo;
       this.memId = memId;
       this.memPw = memPw;
       this.memNm = memNm;
@@ -38,12 +38,12 @@ public class Member {
    }
 
    // getter / setter
-   public int getDevNo() {
-      return devNo;
+   public int getMemNo() {
+      return memNo;
    }
 
-   public void setDevNo(int devNo) {
-      this.devNo = devNo;
+   public void setMemNo(int memNo) {
+      this.memNo = memNo;
    }
 
    public String getMemId() {
@@ -120,7 +120,7 @@ public class Member {
 
    @Override
    public String toString() {
-      return "Member [devNo=" + devNo + ", memId=" + memId + ", memPw=" + memPw + ", memNm=" + memNm + ", phone="
+      return "Member [memNo=" + memNo + ", memId=" + memId + ", memPw=" + memPw + ", memNm=" + memNm + ", phone="
             + phone + ", email=" + email + ", career=" + career + ", spec=" + spec + ", devYn=" + devYn
             + ", scsnFl=" + scsnFl + "]";
    }

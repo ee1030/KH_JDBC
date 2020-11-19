@@ -15,6 +15,18 @@ public class Offer {
 	
 	public Offer() {}
 
+
+	public Offer(String location, int sal, int term, String job, int comNo) {
+		super();
+		this.location = location;
+		this.sal = sal;
+		this.term = term;
+		this.job = job;
+		this.comNo = comNo;
+	}
+
+
+
 	public Offer(int joNo, String location, int sal, int term, String job, int comNo) {
 		super();
 		this.joNo = joNo;

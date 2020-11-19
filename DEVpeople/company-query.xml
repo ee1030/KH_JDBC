@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<!-- member 관련 SQL 구문을 작성하는 XML 파일 -->
+<!-- 회사 정보 등록 쿼리문 -->
+<entry key="insertCompany">
+INSERT INTO TB_COMPANY
+VALUES(SEQ_COM.NEXTVAL, ?, ?, ?, ?, ?)
+</entry>
+
+<!-- 회사 정보 수정 쿼리문 -->
+<entry key="updateCompany">
+UPDATE TB_COMPANY
+SET COM_NM = ?, PHONE = ?, EMAIL = ?, COMMENT = ?
+WHERE MEM_NO = ?
+</entry>
+
+<!-- 회사 정보 삭제 쿼리문 -->
+<entry key="updateSecessionCompany">
+UPDATE TB_COMPANY
+SET C_SCSN_FL = 'Y'
+WHERE MEM_NO = ?
+</entry>
+
+<!-- 회사 번호 조회 쿼리문 -->
+<entry key="findComNo">
+SELECT COM_NO
+FROM TB_COMPANY
+WHERE MEM_NO = ?
+</entry>
+
+</properties>
