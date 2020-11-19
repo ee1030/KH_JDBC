@@ -82,4 +82,33 @@ public class CompanyService {
 		return result;
 	}
 
+	/** 회사 정보 조회 Serevice
+	 * @param memNo
+	 * @return company
+	 */
+	public Company selectMyCompany(int memNo) throws Exception {
+		Connection conn = getConnection();
+		
+		Company company = cDAO.selectMyCompany(conn, memNo);
+		
+		close(conn);
+
+		return company;
+	}
+
+	/** 구인 정보 회사 조회 Service
+	 * @param comNo
+	 * @return company
+	 * @throws Exception
+	 */
+	public Company selectCompany(int comNo) throws Exception {
+		Connection conn = getConnection();
+		
+		Company company = cDAO.selectCompany(conn, comNo);
+		
+		close(conn);
+
+		return company;
+	}
+
 }

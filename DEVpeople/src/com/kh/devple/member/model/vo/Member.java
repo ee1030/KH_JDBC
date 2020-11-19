@@ -20,6 +20,33 @@ public class Member {
 
    // 기본 생성자
    public Member() {}
+   
+   // 로그인 생성자
+   public Member(int memNo, String memId, String memNm, String phone, String email, int career, String spec,
+		char devYn) {
+		super();
+		this.memNo = memNo;
+		this.memId = memId;
+		this.memNm = memNm;
+		this.phone = phone;
+		this.email = email;
+		this.career = career;
+		this.spec = spec;
+		this.devYn = devYn;
+   }
+
+   public Member(String memId, String memPw, String memNm, String phone, String email, int career, String spec,
+			char devYn) {
+		super();
+		this.memId = memId;
+		this.memPw = memPw;
+		this.memNm = memNm;
+		this.phone = phone;
+		this.email = email;
+		this.career = career;
+		this.spec = spec;
+		this.devYn = devYn;
+   }
 
    // 매개변수 생성자
    public Member(int memNo, String memId, String memPw, String memNm, String phone, String email, int career,

@@ -29,4 +29,18 @@ FROM TB_COMPANY
 WHERE MEM_NO = ?
 </entry>
 
+<!-- 회사 정보 조회 쿼리문 -->
+<entry key="selectMyCompany">
+SELECT *
+FROM TB_COMPANY
+WHERE MEM_NO = ?
+</entry>
+
+<!-- 공고에서 회사 정보 조회 쿼리문 -->
+<entry key="selectCompany">
+SELECT *
+FROM TB_COMPANY
+WHERE COM_NO = ?
+</entry>
+
 </properties>

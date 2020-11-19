@@ -12,6 +12,7 @@ public class Offer {
 	private int term;
 	private String job;
 	private int comNo;
+	private char oScsnFl;
 	
 	public Offer() {}
 
@@ -27,7 +28,7 @@ public class Offer {
 
 
 
-	public Offer(int joNo, String location, int sal, int term, String job, int comNo) {
+	public Offer(int joNo, String location, int sal, int term, String job, int comNo, char oScsnFl) {
 		super();
 		this.joNo = joNo;
 		this.location = location;
@@ -35,6 +36,7 @@ public class Offer {
 		this.term = term;
 		this.job = job;
 		this.comNo = comNo;
+		this.oScsnFl = oScsnFl;
 	}
 
 	public int getJoNo() {
@@ -85,10 +87,23 @@ public class Offer {
 		this.comNo = comNo;
 	}
 
+
+	public char getoScsnFl() {
+		return oScsnFl;
+	}
+
+
+	public void setoScsnFl(char oScsnFl) {
+		this.oScsnFl = oScsnFl;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Offer [joNo=" + joNo + ", location=" + location + ", sal=" + sal + ", term=" + term + ", job=" + job
-				+ ", comNo=" + comNo + "]";
+				+ ", comNo=" + comNo + ", oScsnFl=" + oScsnFl + "]";
 	}
+
+
 	
 }

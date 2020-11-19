@@ -3,12 +3,15 @@
 <properties>
 <!-- member 관련 SQL 구문을 작성하는 XML 파일 -->
 <entry key="signUp">
-INSERT INTO TB_MEMBER VALUES(SEQ_MNO.NEXTVAL, ?, ?, ?, ?, ?, DEFAULT, DEFAULT)
+INSERT INTO TB_MEMBER 
+VALUES(SEQ_MEM.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT)
 </entry>
+
 <entry key="login">
-select MEM_NO, MEM_ID, MEM_NM, PHONE, GENDER, HIRE_DT
-from Tb_MEMBER
-WHERE MEM_ID = ? AND MEM_PW = ?
+SELECT MEM_NO, MEM_ID, MEM_NM, PHONE, EMAIL, CAREER, SPEC, DEV_YN
+FROM TB_MEMBER
+WHERE MEM_ID = ?
+AND MEM_PW = ?
 AND SCSN_FL = 'N'
 </entry>
 </properties>

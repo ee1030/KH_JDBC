@@ -136,4 +136,62 @@ public class CompanyDAO {
 		return result;
 	}
 
+	/** 회사 정보 조회 DAO
+	 * @param conn
+	 * @param memNo
+	 * @return company
+	 */
+	public Company selectMyCompany(Connection conn, int memNo) throws Exception {
+		Company company = null;
+		
+		try {
+			String query = prop.getProperty("selectMyCompany");
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, memNo);
+			
+			rset = pstmt.executeQuery();
+			
+			rset.next();
+			company = new Company(rset.getString("COM_NM"),
+								  rset.getString("PHONE"),
+								  rset.getString("EMAIL"),
+								  rset.getString("COMMENT"));
+			
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return company;
+	}
+
+	/** 구인 정보 회사 조회 DAO
+	 * @param conn
+	 * @param comNo
+	 * @return company
+	 * @throws Exception
+	 */
+	public Company selectCompany(Connection conn, int comNo) throws Exception {
+		
+		Company company = null;
+		
+		try {
+			String query = prop.getProperty("selectCompany");
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, comNo);
+			
+			rset = pstmt.executeQuery();
+			
+			rset.next();
+			company = new Company(rset.getString("COM_NM"),
+								  rset.getString("PHONE"),
+								  rset.getString("EMAIL"),
+								  rset.getString("COMMENT"));
+			
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return company;
+	}
+
 }

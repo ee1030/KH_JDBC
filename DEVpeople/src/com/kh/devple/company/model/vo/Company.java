@@ -24,8 +24,6 @@ public class Company {
 		this.memNo = memNo;
 	}
 
-
-
 	public Company(String comNm, String phone, String email, String comment) {
 		super();
 		this.comNm = comNm;
@@ -33,8 +31,6 @@ public class Company {
 		this.email = email;
 		this.comment = comment;
 	}
-
-
 
 	public Company(String comNm, String phone, String email, String comment, int memNo) {
 		super();

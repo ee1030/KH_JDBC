@@ -2,10 +2,37 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <!-- member 관련 SQL 구문을 작성하는 XML 파일 -->
-<!-- 회사 정보 등록 쿼리문 -->
+<!-- 구인 정보 등록 쿼리문 -->
 <entry key="insertOffer">
 INSERT INTO TB_OFFER
-VALUES(SEQ_OFF.NEXTVAL, ?, ?, ?, ?, ?)
+VALUES(SEQ_OFF.NEXTVAL, ?, ?, ?, ?, ?, DEFAULT)
+</entry>
+
+<!-- 구인 정보 수정 쿼리문 -->
+<entry key="updateOffer">
+UPDATE TB_OFFER
+SET LOCATION = ?, SAL = ?, TERM = ?, JOB = ?
+WHERE COM_NO = ?
+</entry>
+
+<!-- 해당 회사 구인 정보 조회 쿼리문 -->
+<entry key="selectOfferByCompany">
+SELECT *
+FROM OFFER_COM
+WHERE COM_NO = ?
+</entry>
+
+<!-- 구인 정보 삭제 쿼리문 -->
+<entry key="updateSecessionOffer">
+UPDATE TB_OFFER
+SET O_SCSN_FL = 'Y'
+WHERE JO_NO = ?
+</entry>
+
+<!-- 모든 구인 정보 조회 쿼리문 -->
+<entry key="selectOffer">
+SELECT *
+FROM OFFER_COM
 </entry>
 
 </properties>
