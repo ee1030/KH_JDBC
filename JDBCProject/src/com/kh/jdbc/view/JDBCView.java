@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kh.jdbc.board.view.BoardView;
 import com.kh.jdbc.member.model.service.MemberService;
 import com.kh.jdbc.member.model.vo.Member;
 
@@ -15,6 +16,7 @@ public class JDBCView {
 
 	private Scanner sc = new Scanner(System.in);
 	private MemberService mService = new MemberService();
+	private BoardView boardView = new BoardView();
 	
 	private Member loginMember = null; // 로그인된 회원의 정보를 저장
 	
@@ -51,7 +53,8 @@ public class JDBCView {
 				} else {
 					System.out.println("========================");
 					System.out.println("★~ 메인메뉴 ~★");
-					System.out.println("1. 회원기능");
+					System.out.println("1. 회원 기능");
+					System.out.println("2. 게시판 기능");
 					System.out.println("9. 로그아웃");
 					System.out.println("0. 프로그램 종료");
 					System.out.println("========================");
@@ -64,6 +67,7 @@ public class JDBCView {
 					
 					switch(sel) {
 					case 1 : memberMenu(); break;
+					case 2 : boardView.boardMenu(); break;
 					case 9 : 
 						loginMember = null;
 						System.out.println("로그아웃했데수");
