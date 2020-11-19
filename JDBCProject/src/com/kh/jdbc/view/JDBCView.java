@@ -18,7 +18,7 @@ public class JDBCView {
 	private MemberService mService = new MemberService();
 	private BoardView boardView = new BoardView();
 	
-	private Member loginMember = null; // 로그인된 회원의 정보를 저장
+	public static Member loginMember = null; // 로그인된 회원의 정보를 저장
 	
 	// alt + shift + j
 	/**

@@ -13,6 +13,16 @@ public class Board {
 	private int categoryCd;
 	
 	public Board() {}
+	
+	
+
+	public Board(String title, String content, int memNo, int categoryCd) {
+		super();
+		this.title = title;
+		this.content = content;
+		this.memNo = memNo;
+		this.categoryCd = categoryCd;
+	}
 
 	public Board(int boardNo, String title, String content, Date createDt, int readCount, char deleteFl, int memNo,
 			int categoryCd) {
