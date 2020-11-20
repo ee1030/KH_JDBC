@@ -16,7 +16,6 @@ import com.kh.devple.company.model.vo.Company;
  *
  */
 public class CompanyDAO {
-	private Statement stmt = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rset = null;
 	

@@ -72,10 +72,10 @@ public class OfferService {
 	 * @return result
 	 * @throws Exception
 	 */
-	public int updateSecessionOffer(int joNo) throws Exception {
+	public int updateSecessionOffer(int joNo, int memNo) throws Exception {
 		Connection conn = getConnection();
 		
-		int result = oDAO.updateSecessionOffer(conn, joNo);
+		int result = oDAO.updateSecessionOffer(conn, joNo, memNo);
 		
 		if(result > 0) commit(conn);
 		else rollback(conn);

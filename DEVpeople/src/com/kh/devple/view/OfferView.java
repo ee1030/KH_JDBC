@@ -27,7 +27,6 @@ public class OfferView {
 		
 		do {
 			try {
-				// 회원 탈퇴로 인해 로그아웃 될 경우 메인 메뉴로 리턴
 				System.out.println("====================================================");
 				System.out.println("             ★~ 구인 정보 관련 메뉴 ~★              ");
 				System.out.println("1. 내 구인 정보 확인");
@@ -178,13 +177,13 @@ public class OfferView {
 		char check = sc.nextLine().toUpperCase().charAt(0);
 		
 		if(check == 'Y') {
-			try {			
-				int result = oService.updateSecessionOffer(joNo);
+			try {
+				int result = oService.updateSecessionOffer(joNo, DevpleView.loginMember.getMemNo());
 				
 				if(result > 0) {
 					System.out.println("구인 정보 삭제에 성공 했습니다.");
 				} else {
-					System.out.println("존재하는 구인 정보가 아닙니다.");
+					System.out.println("존재하는 구인 정보가 아니거나, 본인의 구인정보가 아닙니다.");
 				}
 				
 			} catch (Exception e) {
