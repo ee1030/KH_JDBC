@@ -47,6 +47,16 @@ public class Member {
 		this.spec = spec;
 		this.devYn = devYn;
    }
+   
+   public Member(int memNo,String memNm, String phone, String email, int career, String spec) {
+	   super();
+	   	this.memNo = memNo;
+		this.memNm = memNm;
+		this.phone = phone;
+		this.email = email;
+		this.career = career;
+		this.spec = spec;
+   }
 
    // 매개변수 생성자
    public Member(int memNo, String memId, String memPw, String memNm, String phone, String email, int career,

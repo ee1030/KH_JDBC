@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<!-- review 관련 SQL 구문을 작성하는 XML 파일 -->
+
+<entry key="selectReview">
+SELECT * FROM V_REVIEW
+ORDER BY REVW_NO DESC
+</entry>
+
+<entry key="insertReview">
+INSERT INTO TB_REVIEW(REVW_NO, TITLE, CONTENT, CREATE_AT, MEM_NO)
+VALUES(SEQ_REV.NEXTVAL, ?, ?, DEFAULT, ?)
+</entry>
+
+</properties>

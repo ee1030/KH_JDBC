@@ -2,73 +2,92 @@ package com.kh.devple.review.model.vo;
 
 import java.util.Date;
 
-/**  진선
+/**
+ * 진선
+ * 
  * @author user1
  *
  */
 public class Review {
 
-   private int revwNo; //후기 번호
-   private String title; //후기 제목
-   private String content; //후기 내용
-   private Date createAt; //작성일
-   private int memNo; //회원번호
-   
-   public Review() {}
+	private int revwNo; // 후기 번호
+	private String title; // 후기 제목
+	private String content; // 후기 내용
+	private Date createAt; // 작성일
+	private int memNo; // 회원번호
 
-   public Review(int revwNo, String title, String content, Date createAt, int memNo) {
-      super();
-      this.revwNo = revwNo;
-      this.title = title;
-      this.content = content;
-      this.createAt = createAt;
-      this.memNo = memNo;
-   }
+	public Review() {
+	}
 
-   public int getRevwNo() {
-      return revwNo;
-   }
+	public Review(int revwNo, String title, String content, Date createAt, int memNo) {
+		super();
+		this.revwNo = revwNo;
+		this.title = title;
+		this.content = content;
+		this.createAt = createAt;
+		this.memNo = memNo;
+	}
 
-   public void setRevwNo(int revwNo) {
-      this.revwNo = revwNo;
-   }
+	public Review(int revwNo, String title, String content) {
+		super();
+		this.revwNo = revwNo;
+		this.title = title;
+		this.content = content;
+	}
 
-   public String getTitle() {
-      return title;
-   }
+	
+	
+	public Review(String title, String content, int memNo) {
+		super();
+		this.title = title;
+		this.content = content;
+		this.memNo = memNo;
+	}
 
-   public void setTitle(String title) {
-      this.title = title;
-   }
+	public int getRevwNo() {
+		return revwNo;
+	}
 
-   public String getContent() {
-      return content;
-   }
+	public void setRevwNo(int revwNo) {
+		this.revwNo = revwNo;
+	}
 
-   public void setContent(String content) {
-      this.content = content;
-   }
+	public String getTitle() {
+		return title;
+	}
 
-   public Date getCreateAt() {
-      return createAt;
-   }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-   public void setCreateAt(Date createAt) {
-      this.createAt = createAt;
-   }
+	public String getContent() {
+		return content;
+	}
 
-   public int getDevNo() {
-      return memNo;
-   }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-   public void setDevNo(int memNo) {
-      this.memNo = memNo;
-   }
+	public Date getCreateAt() {
+		return createAt;
+	}
 
-   @Override
-   public String toString() {
-      return "Review [revwNo=" + revwNo + ", title=" + title + ", content=" + content + ", createAt=" + createAt
-            + ", memNo=" + memNo + "]";
-   }
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+	public int getmemNo() {
+		return memNo;
+	}
+
+	public void setmemNo(int memNo) {
+		this.memNo = memNo;
+	}
+
+	@Override
+	public String toString() {
+		return "Review [revwNo=" + revwNo + ", title=" + title + ", content=" + content + ", createAt=" + createAt
+				+ ", memNo=" + memNo + "]";
+	}
 
 }

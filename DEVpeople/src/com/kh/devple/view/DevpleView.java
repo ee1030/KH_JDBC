@@ -54,7 +54,6 @@ public class DevpleView {
 					}
 				} else if(loginMember.getDevYn() == 'Y') {
 					System.out.println("★★★★★★★★★ 개발의 민족 ★★★★★★★★★");
-					System.out.println("★★★★★★★★★ " + loginMember.getMemId() + "님 ㅎㅇ★★★★★★★★★");
 					System.out.println("1. 구인정보 조회");
 					System.out.println("2. 내정보 관련 메뉴");
 					System.out.println("3. 후기 관련 메뉴");
@@ -67,7 +66,7 @@ public class DevpleView {
 					switch(sel) {
 					case 1: selectOffer(); break;
 					case 2: displayInfo(); break;
-					case 3: break;
+					case 3: rView.displayReview(); break;
 					case 4: 
 						loginMember = null;
 						System.out.println("로그아웃 되었습니다.");
@@ -77,7 +76,6 @@ public class DevpleView {
 					}
 				} else {
 					System.out.println("★★★★★★★★★ 개발의 민족 ★★★★★★★★★");
-					System.out.println("★★★★★★★★★ " + loginMember.getMemId() + "님 ㅎㅇ★★★★★★★★★");
 					System.out.println("1. 회사 관련 메뉴");
 					System.out.println("2. 구인 정보 관련 메뉴");
 					System.out.println("3. 내 정보 관련 메뉴");
@@ -189,7 +187,8 @@ public class DevpleView {
 				System.out.println("             ★~ 회원 정보 기능 ~★              ");
 				System.out.println("1. 내 정보 조회");
 				System.out.println("2. 내 정보 수정");
-				System.out.println("3. 회원 탈퇴");				
+				System.out.println("3. 회원 탈퇴");		
+				System.out.println("4. 비밀번호 변경");
 				System.out.println("0. 메인메뉴로 돌아가기");
 				System.out.println("=========================================");
 				System.out.print("메뉴 입력 >> ");
@@ -197,9 +196,10 @@ public class DevpleView {
 				sc.nextLine();
 				
 				switch(sel) {
-				case 1 :  break;
-				case 2 :  break;
-				case 3 :  break;
+				case 1 : selectMyInfo(); break;
+				case 2 : updateMyInfo(); break;
+				case 3 : updateSecessionMember(); break;
+				case 4 : updateMyPw(); break;
 				case 0 : System.out.println("메인메뉴로 돌아갑니다."); break;
 				default : System.out.println("잘못 입력하셨습니다.");
 				}
@@ -212,13 +212,12 @@ public class DevpleView {
 			
 		} while(sel != 0);
 	}
-
-	/** 회원 가입 View 
-	 *  @author 박희도
+	/** 
+	 *  회원 가입 View  
 	 */
 	private void signUp() {
 		System.out.println("★★★★★★★★★ 개발의 민족 ★★★★★★★★★");
-		System.out.println("[회원 가입]");
+		System.out.println("『          회원 가입          』");
 		
 		System.out.print("아이디 : ");
 		String memId = sc.nextLine();
@@ -245,29 +244,29 @@ public class DevpleView {
 		System.out.print("개발자 여부(Y/N) : ");
 		char devYn = sc.nextLine().toUpperCase().charAt(0);
 		
-		// 입력받은 값을 Member 객체에 저장
+		// 회원 정보 -> Member 객체에 저장
 		Member newMember = new Member(memId, memPw, memNm, phone, email, career, spec, devYn);
 	
-		// 입력받은 회원 정보를 DB에 삽입하기 위한 service 호출
 		try {
+			// Service 메소드 호출 및 결과 반환
 			int result = mService.signUp(newMember);
 			
 			if(result > 0) {
-				System.out.println("회원 가입 성공 ~!");
+				System.out.println("회원 가입이 되었습니다");
 			} else {
-				System.out.println("회원 가입 실패 T^T");
+				System.out.println("회원 가입 실패");
 			}
 		} catch (Exception e) {
-			System.out.println("회원 가입 과정에서 오류 발생..");
+			System.out.println("회원 가입 과정에서 오류 발생");
 			e.printStackTrace();
 		}
 	}
 	
-	/** 로그인 View
-	 * @author 박희도
+	/** 
+	 * 로그인 View
 	 */
 	private void login() {
-		System.out.println("『          로그인          』");
+		System.out.println("『          로그인         』");
 		
 		System.out.print("아이디 : ");
 		String memId = sc.nextLine();
@@ -275,27 +274,168 @@ public class DevpleView {
 		System.out.print("비밀번호 : ");
 		String memPw = sc.nextLine();
 		
-		// 아이디, 비밀번호를 하나의 Memeber 객체에 저장
+		// ID, PW -> Member 객체에 저장
 		Member member = new Member();
 		member.setMemId(memId);
 		member.setMemPw(memPw);
 		
 		try {
-			// 입력 받은 ID, PW를 이용하여 로그인 서비스 수행
-			// -> 반환 받은 결과를 loginMember에 저장
+			// Service 메소드 호출 및 결과 반환
 			loginMember = mService.login(member);
 			
-			// 로그인이 성공한 경우
+			// 로그인 성공
 			if(loginMember != null) {
-				System.out.println("***** " + loginMember.getMemNm() + "님 환영 합니다  *****");
+				System.out.println("---------- Welcom " + loginMember.getMemNm() + "! ----------");
+			// 로그인 실패
 			} else {
-				System.out.println("아이디 또는 비밀번호가 일치하지 않거나, 탈퇴한 회원 입니다");
+				System.out.println("아이디 혹은 비밀번호가 일치하지 않습니다. 다시 확인해주시길 바랍니다. ");
 			}	
 		} catch (Exception e) {
 			System.out.println("로그인 과정에서 오류 발생");
 			e.printStackTrace();
-		}
-		
+		}	
 	}
+	
 
+	/**
+	 * 회원 정보 조회 View
+	 */
+	private void selectMyInfo() {
+		// loginMember 객체에서 필요한 정보 가져옴
+		System.out.println("『          내 정보          』");
+		System.out.println("회원 번호 : " + loginMember.getMemNo());
+		System.out.println("아이디 : " + loginMember.getMemId());
+		System.out.println("이름 : " + loginMember.getMemNm());
+		System.out.println("전화번호 : " + loginMember.getPhone());
+		System.out.println("이메일 : " + loginMember.getEmail());
+		System.out.println("경력 : " + loginMember.getCareer());
+		System.out.println("기술 : " + loginMember.getSpec());
+	}
+	
+	/**
+	 * 회원 정보 수정 View
+	 */
+	private void updateMyInfo() {
+		System.out.println("『          내 정보 변경          』");
+		System.out.print(" 이름 : ");
+		String memNm = sc.nextLine();
+		
+		System.out.print(" 전화번호 : ");
+		String phone = sc.nextLine();
+		
+		System.out.print(" 이메일: ");
+		String email = sc.nextLine();
+		
+		System.out.print(" 경력(년) : ");
+		int career = sc.nextInt();
+		sc.nextLine(); // 개행문자 제거
+		
+		System.out.print(" 기술 : ");
+		String spec = sc.nextLine();
+		
+		// 수정할 정보 저장 객체 생성
+		Member upMember = new Member(loginMember.getMemNo(), memNm, phone, email, career, spec);
+		
+		try {
+			// Service 메소드 호출 및 결과 반환
+			int result = mService.updateMyInfo(upMember);
+			
+			// ResultSet 성공 시
+			if(result > 0) {
+				System.out.println("내 정보 변경이 성공되었습니다");
+				
+				// 수정한 데이터 
+				loginMember.setMemNm(memNm);
+				loginMember.setPhone(phone);
+				loginMember.setEmail(email);
+				loginMember.setCareer(career);
+				loginMember.setSpec(spec);
+			
+			// ResultSet 실패 시
+			} else {
+				System.out.println("내 정보 변경이 실패되었습니다");
+			} 
+		} catch (Exception e) {
+			System.out.println("정보 수정 과정에서 오류 발생");
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 비밀번호 변경 View
+	 */
+	private void updateMyPw() {
+		System.out.println("『          비밀번호 변경          』");
+		System.out.print("현재 비밀번호 : ");
+		String currPw = sc.nextLine();
+		
+		System.out.print("새 비밀번호 : ");
+		String newPw = sc.nextLine();
+		
+		System.out.print("새 비밀번호 확인 : ");
+		String newPw2 = sc.nextLine();
+		
+		// 새 비밀번호 일치 확인
+		if(newPw.equals(newPw2)) {
+			
+			// 새 비밀번호 저장 객체
+			Member updatePw = new Member();
+			
+			// 회원 번호를 통해 현재 비밀번호 입력
+			updatePw.setMemNo(loginMember.getMemNo());
+			updatePw.setMemPw(currPw);
+			
+			try {
+				// Service 메소드 호출 및 결과 반환
+				int result = mService.updatePw(updatePw, newPw);
+				
+				// 반환 성공 시
+				if(result > 0) {
+					System.out.println("비밀번호가 변경 되었습니다");
+				// 반환 실패 시
+				} else {
+					System.out.println("현재 비밀번호를 다시 확인해주세요");
+				}	
+			} catch (Exception e) {
+				System.out.println("비밀번호 변경 과정에서 오류 발생");
+			}
+		}
+	}
+	
+	/** 
+	 * 	회원 탈퇴 여부 View
+	 */
+	private void updateSecessionMember() {
+		System.out.println("『          회원 탈퇴          』");
+		
+		System.out.print("비밀번호 : ");
+		String memPw = sc.nextLine();
+		
+		System.out.print("정말 삭제 하시겠습니까? (Y/N) : ");
+		char check = sc.nextLine().toUpperCase().charAt(0);
+		
+		if(check == 'Y') {
+			try {
+				// 
+				Member upMember = new Member();
+				upMember.setMemNo(loginMember.getMemNo( ));
+				upMember.setMemPw(memPw);
+				
+				int result = mService.updateSecessionMember(upMember);
+				
+				if(result > 0) {
+					System.out.println("탈퇴 되셨습니다");
+					System.out.println("감사합니다");
+					loginMember = null;
+				}else {
+					System.out.println("비밀번호가 일치하지 않습니다");
+				}
+				
+			} catch(Exception e){
+				System.out.println("회원 탈퇴 과정에서 오류 발생");
+			}	
+		} else {
+			System.out.println("탈퇴가 취소 되었습니다");
+		}
+	}
 }
