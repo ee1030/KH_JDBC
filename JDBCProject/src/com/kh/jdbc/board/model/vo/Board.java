@@ -13,8 +13,14 @@ public class Board {
 	private int categoryCd;
 	
 	public Board() {}
-	
-	
+
+	public Board(int boardNo, String title, String content, int categoryCd) {
+		super();
+		this.boardNo = boardNo;
+		this.title = title;
+		this.content = content;
+		this.categoryCd = categoryCd;
+	}
 
 	public Board(String title, String content, int memNo, int categoryCd) {
 		super();

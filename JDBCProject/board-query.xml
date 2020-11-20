@@ -26,4 +26,25 @@ INSERT INTO TB_BOARD(BOARD_NO, TITLE, CONTENT, MEM_NO, CATEGORY_CD)
 VALUES(SEQ_BNO.NEXTVAL, ?, ?, ?, ?)
 </entry>
 
+<!-- 특정 게시글이 특정 회원의 글이 맞는지 조회 -->
+<entry key="checkMyBoard">
+SELECT COUNT(*)
+FROM TB_BOARD
+WHERE MEM_NO = ? AND BOARD_NO = ? AND DELETE_FL = 'N'
+</entry>
+
+<!-- 게시글 수정 쿼리문 -->
+<entry key="updateBoard">
+UPDATE TB_BOARD
+SET CATEGORY_CD = ?, TITLE = ?, CONTENT = ?
+WHERE BOARD_NO = ?
+</entry>
+
+<!-- 게시글 삭제 쿼리문 -->
+<entry key="updateDeleteFl">
+UPDATE TB_BOARD
+SET DELETE_FL = 'Y'
+WHERE BOARD_NO = ?
+</entry>
+
 </properties>
