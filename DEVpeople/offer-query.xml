@@ -26,7 +26,7 @@ WHERE COM_NO = ?
 <entry key="updateSecessionOffer">
 UPDATE TB_OFFER
 SET O_SCSN_FL = 'Y'
-WHERE JO_NO = ? AND MEM_NO = ?
+WHERE JO_NO = ? AND COM_NO = ?
 </entry>
 
 <!-- 모든 구인 정보 조회 쿼리문 -->

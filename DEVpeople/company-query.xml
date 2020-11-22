@@ -11,7 +11,7 @@ VALUES(SEQ_COM.NEXTVAL, ?, ?, ?, ?, ?)
 <!-- 회사 정보 수정 쿼리문 -->
 <entry key="updateCompany">
 UPDATE TB_COMPANY
-SET COM_NM = ?, PHONE = ?, EMAIL = ?, COMMENT = ?
+SET COM_NM = ?, PHONE = ?, EMAIL = ?, INTRODUCTION = ?
 WHERE MEM_NO = ?
 </entry>
 
@@ -33,14 +33,14 @@ WHERE MEM_NO = ?
 <entry key="selectMyCompany">
 SELECT *
 FROM TB_COMPANY
-WHERE MEM_NO = ?
+WHERE MEM_NO = ? AND C_SCSN_FL = 'N'
 </entry>
 
 <!-- 공고에서 회사 정보 조회 쿼리문 -->
 <entry key="selectCompany">
 SELECT *
 FROM TB_COMPANY
-WHERE COM_NO = ?
+WHERE COM_NO = ? AND C_SCSN_FL = 'N'
 </entry>
 
 </properties>

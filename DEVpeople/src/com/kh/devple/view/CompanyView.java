@@ -65,7 +65,7 @@ public class CompanyView {
 				System.out.println("전화번호 : " + company.getPhone());
 				System.out.println("이메일 : " + company.getEmail());
 				System.out.println("회사 소개 : ");
-				System.out.println(company.getComment());
+				System.out.println(company.getIntroduction());
 				System.out.println("==================================");
 			}
 			
@@ -93,7 +93,7 @@ public class CompanyView {
 		StringBuffer sb = new StringBuffer();
 		String str = null;
 		
-		System.out.print("----- 회사 소개글 입력(exit입력 시 입력 종료) -----");
+		System.out.println("----- 회사 소개글 입력(exit입력 시 입력 종료) -----");
 		while(true) {
 			str = sc.nextLine();
 			

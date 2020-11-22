@@ -10,7 +10,7 @@ public class Company {
 	private String comNm;
 	private String phone;
 	private String email;
-	private String comment;
+	private String introduction;
 	private int memNo;
 	private char cScsnFl;
 	
@@ -24,30 +24,30 @@ public class Company {
 		this.memNo = memNo;
 	}
 
-	public Company(String comNm, String phone, String email, String comment) {
+	public Company(String comNm, String phone, String email, String introduction) {
 		super();
 		this.comNm = comNm;
 		this.phone = phone;
 		this.email = email;
-		this.comment = comment;
+		this.introduction = introduction;
 	}
 
-	public Company(String comNm, String phone, String email, String comment, int memNo) {
+	public Company(String comNm, String phone, String email, String introduction, int memNo) {
 		super();
 		this.comNm = comNm;
 		this.phone = phone;
 		this.email = email;
-		this.comment = comment;
+		this.introduction = introduction;
 		this.memNo = memNo;
 	}
 
-	public Company(int comNo, String comNm, String phone, String email, String comment, int memNo, char cScsnFl) {
+	public Company(int comNo, String comNm, String phone, String email, String introduction, int memNo, char cScsnFl) {
 		super();
 		this.comNo = comNo;
 		this.comNm = comNm;
 		this.phone = phone;
 		this.email = email;
-		this.comment = comment;
+		this.introduction = introduction;
 		this.memNo = memNo;
 		this.cScsnFl = cScsnFl;
 	}
@@ -84,12 +84,12 @@ public class Company {
 		this.email = email;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getIntroduction() {
+		return introduction;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
 	}
 
 	public int getMemNo() {
@@ -110,8 +110,8 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company [comNo=" + comNo + ", comNm=" + comNm + ", phone=" + phone + ", email=" + email + ", comment="
-				+ comment + ", memNo=" + memNo + ", cScsnFl=" + cScsnFl + "]";
+		return "Company [comNo=" + comNo + ", comNm=" + comNm + ", phone=" + phone + ", email=" + email + ", introduction="
+				+ introduction + ", memNo=" + memNo + ", cScsnFl=" + cScsnFl + "]";
 	}
 	
 	

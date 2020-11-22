@@ -131,14 +131,14 @@ public class OfferDAO {
 	 * @return result
 	 * @throws Exception
 	 */
-	public int updateSecessionOffer(Connection conn, int joNo, int memNo) throws Exception {
+	public int updateSecessionOffer(Connection conn, int joNo, int comNo) throws Exception {
 		int result = 0;
 		
 		try {
 			String query = prop.getProperty("updateSecessionOffer");
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1,joNo);
-			pstmt.setInt(2, memNo);
+			pstmt.setInt(2, comNo);
 			
 			result = pstmt.executeUpdate();
 			

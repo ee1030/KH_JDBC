@@ -45,7 +45,7 @@ public class CompanyDAO {
 			pstmt.setString(1, company.getComNm());
 			pstmt.setString(2, company.getPhone());
 			pstmt.setString(3, company.getEmail());
-			pstmt.setString(4, company.getComment());
+			pstmt.setString(4, company.getIntroduction());
 			pstmt.setInt(5, company.getMemNo());
 			
 			result = pstmt.executeUpdate();
@@ -73,7 +73,7 @@ public class CompanyDAO {
 			pstmt.setString(1, company.getComNm());
 			pstmt.setString(2, company.getPhone());
 			pstmt.setString(3, company.getEmail());
-			pstmt.setString(4, company.getComment());
+			pstmt.setString(4, company.getIntroduction());
 			pstmt.setInt(5, company.getMemNo());
 			
 			result = pstmt.executeUpdate();
@@ -154,7 +154,7 @@ public class CompanyDAO {
 			company = new Company(rset.getString("COM_NM"),
 								  rset.getString("PHONE"),
 								  rset.getString("EMAIL"),
-								  rset.getString("COMMENT"));
+								  rset.getString("INTRODUCTION"));
 			
 		} finally {
 			close(rset);
@@ -184,7 +184,7 @@ public class CompanyDAO {
 			company = new Company(rset.getString("COM_NM"),
 								  rset.getString("PHONE"),
 								  rset.getString("EMAIL"),
-								  rset.getString("COMMENT"));
+								  rset.getString("INTRODUCTION"));
 			
 		} finally {
 			close(rset);

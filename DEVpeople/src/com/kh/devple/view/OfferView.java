@@ -178,7 +178,8 @@ public class OfferView {
 		
 		if(check == 'Y') {
 			try {
-				int result = oService.updateSecessionOffer(joNo, DevpleView.loginMember.getMemNo());
+				int comNo = new CompanyService().findComNo(DevpleView.loginMember.getMemNo());
+				int result = oService.updateSecessionOffer(joNo, comNo);
 				
 				if(result > 0) {
 					System.out.println("구인 정보 삭제에 성공 했습니다.");
