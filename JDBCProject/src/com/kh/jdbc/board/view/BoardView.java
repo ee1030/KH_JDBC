@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.kh.jdbc.board.model.service.BoardService;
 import com.kh.jdbc.board.model.vo.Board;
 import com.kh.jdbc.board.model.vo.VBoard;
+import com.kh.jdbc.comment.model.vo.Comment;
 import com.kh.jdbc.comment.view.CommentView;
 import com.kh.jdbc.view.JDBCView;
 
@@ -110,20 +111,53 @@ public class BoardView {
 			
 			if(vboard == null) {
 				System.out.println("조회 결과가 없습니다.");
-			} else {
-				System.out.println("----------------------------------------------------------------------------");
-				System.out.printf("%d | [%s] %s\n",vboard.getBoardNo(),  vboard.getCategoryNm(), vboard.getTitle());
-				System.out.printf("작성자 : %s | 작성일  : %s | 조회수 %d\n",vboard.getMemNm(), vboard.getCreateDt(), vboard.getReadCount());
-				System.out.println("----------------------------------------------------------------------------");
-				System.out.println(vboard.getContent());
-				System.out.println("----------------------------------------------------------------------------");
+			}else {
 				
-				// ************************ 댓글 기능 추가 ************************
-				//  CommentView 객체 생성
-				CommentView commentView =  new CommentView();
+				int sel = 0;
 				
-				// 1) 해당 게시글의 댓글 조회
-				// 2) 댓글 삽입, 수정, 삭제
+				do {
+					System.out.println("----------------------------------------------------------------------------");
+					System.out.printf("%d | [%s] %s\n",vboard.getBoardNo(),  vboard.getCategoryNm(), vboard.getTitle());
+					System.out.printf("작성자 : %s | 작성일  : %s | 조회수 %d\n",vboard.getMemNm(), vboard.getCreateDt(), vboard.getReadCount());
+					System.out.println("----------------------------------------------------------------------------");
+					System.out.println(vboard.getContent());
+					System.out.println("----------------------------------------------------------------------------");
+					
+					// ************************ 댓글 기능 추가 ************************
+					//  CommentView 객체 생성
+					CommentView commentView =  new CommentView();
+					
+					// 1) 해당 게시글의 댓글 조회
+					commentView.selectComment(boardNo);
+					
+					// 2) 댓글 삽입, 수정, 삭제
+					System.out.println("--------------- [댓글 메뉴] ---------------");
+					System.out.println("1. 댓글 작성 / 2. 댓글 수정 / 3. 댓글 삭제 / 0. 이전으로");
+					System.out.print("메뉴 선택 >> ");
+					sel = sc.nextInt(); // 댓글 메뉴 입력 받기
+					sc.nextLine(); 
+					
+					// 작성, 수정, 삭제에 모두 필요한 회원번호, 게시글 번호를 저장한
+					// Comment 객체 생성
+					Comment comment = new Comment();
+					comment.setMemNo(JDBCView.loginMember.getMemNo());
+					comment.setBoardNo(vboard.getBoardNo());
+					
+					switch(sel) {
+					case 1: commentView.insertComment(comment); break; // 작성 (회원번호, 게시글 번호, 댓글 내용)
+					case 2:
+						System.out.println("[댓글 수정]");
+						commentView.updateComment(comment);
+						break; // 수정 (게시글 번호, 댓글 내용 + 회원번호)
+					case 3:
+						System.out.println("[댓글 삭제]");
+						commentView.updateDeleteFl(comment);
+						break; // 삭제 (게시글 번호 + 회원 번호)
+					case 0: System.out.println("게시판 메뉴로 돌아갑니다...");break;
+					default : System.out.println("잘못 입력했데수");
+					}
+					
+				} while(sel != 0);
 			}
 			
 		} catch (Exception e) {

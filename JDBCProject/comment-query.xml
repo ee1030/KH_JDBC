@@ -2,6 +2,42 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <!-- 댓글 관련 SQL 구문을 작성하는 XML 파일 -->
+<!-- 댓글 조회 SQL -->
+<entry key="selectComment">
+SELECT COMMENT_NO, CONTENT, CREATE_DT, MEM_NM
+FROM TB_COMMENT
+JOIN TB_MEMBER USING(MEM_NO)
+WHERE BOARD_NO = ? AND DELETE_FL = 'N'
+ORDER BY COMMENT_NO DESC
+</entry>
 
+<!-- 댓글 작성 -->
+<entry key="insertComment">
+INSERT INTO TB_COMMENT(COMMENT_NO, CONTENT, MEM_NO, BOARD_NO)
+VALUES(SEQ_CNO.NEXTVAL, ?, ?, ?)
+</entry>
+
+<!-- 댓글 수정 -->
+<entry key="updateComment">
+UPDATE TB_COMMENT
+SET CONTENT = ?
+WHERE COMMENT_NO = ?
+</entry>
+
+<!-- 댓글 삭제 -->
+<entry key="updateDeleteFl">
+UPDATE TB_COMMENT
+SET DELETE_FL = 'Y'
+WHERE COMMENT_NO = ?
+</entry>
+
+<!-- 내 댓글 확인 -->
+<entry key="checkMyComment">
+SELECT COUNT(*) FROM TB_COMMENT
+WHERE BOARD_NO = ?
+AND COMMENT_NO = ?
+AND MEM_NO = ?
+AND DELETE_FL = 'N'
+</entry>
 
 </properties>
