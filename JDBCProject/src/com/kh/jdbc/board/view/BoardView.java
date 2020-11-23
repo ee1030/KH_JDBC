@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.kh.jdbc.board.model.service.BoardService;
 import com.kh.jdbc.board.model.vo.Board;
 import com.kh.jdbc.board.model.vo.VBoard;
+import com.kh.jdbc.comment.view.CommentView;
 import com.kh.jdbc.view.JDBCView;
 
 /** Board View
@@ -116,6 +117,13 @@ public class BoardView {
 				System.out.println("----------------------------------------------------------------------------");
 				System.out.println(vboard.getContent());
 				System.out.println("----------------------------------------------------------------------------");
+				
+				// ************************ 댓글 기능 추가 ************************
+				//  CommentView 객체 생성
+				CommentView commentView =  new CommentView();
+				
+				// 1) 해당 게시글의 댓글 조회
+				// 2) 댓글 삽입, 수정, 삭제
 			}
 			
 		} catch (Exception e) {
