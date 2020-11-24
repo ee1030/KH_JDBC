@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<!-- board 관련 SQL 구문을 작성하는 XML 파일 -->
+<!-- 전체 게시글 조회 쿼리문 -->
+<entry key="selectAllBoard">
+SELECT * FROM V_BOARD2
+ORDER BY BOARD_NO DESC
+</entry>
+
+<!-- 삭제된 게시글 조회 쿼리문 -->
+<entry key="selectDeleteBoard">
+SELECT * FROM V_BOARD2
+WHERE DELETE_FL = 'Y'
+ORDER BY BOARD_NO DESC
+</entry>
+
+<!-- 삭제된 게시글 복구 쿼리문 -->
+<entry key="restoreBoard">
+UPDATE TB_BOARD
+SET DELETE_FL = 'N'
+WHERE BOARD_NO = ? AND DELETE_FL = 'Y'
+</entry>
+
+
+</properties>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<!-- 댓글 관련 SQL 구문을 작성하는 XML 파일 -->
+<!-- 삭제된 댓글 조회 SQL -->
+<entry key="selectDeleteComment">
+SELECT COMMENT_NO, CONTENT, CREATE_DT, MEM_NM
+FROM TB_COMMENT
+JOIN TB_MEMBER USING(MEM_NO)
+WHERE DELETE_FL = 'Y'
+ORDER BY COMMENT_NO DESC
+</entry>
+
+<!-- 삭제된 댓글 복구 SQL -->
+<entry key="restoreComment">
+UPDATE TB_COMMENT
+SET DELETE_FL = 'N'
+WHERE COMMENT_NO = ?
+</entry>
+
+</properties>
